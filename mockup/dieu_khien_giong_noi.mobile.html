@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Yolo Home · Điều khiển giọng nói</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+.phone-wrap{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:32px 16px;background:#f0f0f0}
+.phone{width:390px;min-height:844px;background:var(--color-background-primary);border-radius:44px;overflow:hidden;border:8px solid #1a1a1a;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative;display:flex;flex-direction:column}
+
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 6px;background:var(--color-background-primary)}
+.status-time{font-size:15px;font-weight:600;color:var(--color-text-primary)}
+.status-icons{display:flex;gap:6px;align-items:center}
+.status-icons svg{width:14px;height:14px;stroke:var(--color-text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.app-bar{display:flex;align-items:center;gap:12px;padding:10px 20px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.back-btn svg{width:16px;height:16px;stroke:var(--color-text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bar-title{font-size:16px;font-weight:500;color:var(--color-text-primary);flex:1}
+.bar-badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+
+.content{flex:1;overflow-y:auto;padding:24px 20px 100px;display:flex;flex-direction:column;align-items:center}
+
+.tab-bar{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;padding-top:10px}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding-top:4px}
+.tab-item svg{width:22px;height:22px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab-item span{font-size:10px;color:var(--color-text-tertiary)}
+.tab-item.active svg{stroke:var(--color-text-info)}
+.tab-item.active span{color:var(--color-text-info)}
+
+/* ── Mic hero ── */
+.mic-section{display:flex;flex-direction:column;align-items:center;width:100%;margin-bottom:28px}
+.mic-label{font-size:13px;color:var(--color-text-tertiary);margin-bottom:20px}
+
+.mic-outer{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:16px}
+.mic-outer.listening{background:rgba(59,130,246,.08);animation:pulse 1.8s ease-in-out infinite}
+.mic-outer.idle{background:var(--color-background-secondary)}
+.mic-outer.success{background:rgba(34,197,94,.1)}
+.mic-outer.error{background:rgba(239,68,68,.08)}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.25)}
+  50%{box-shadow:0 0 0 24px rgba(59,130,246,0)}
+}
+
+.mic-btn{width:112px;height:112px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s}
+.mic-btn:active{transform:scale(.95)}
+.mic-btn.listening{background:var(--color-background-info)}
+.mic-btn.idle{background:var(--color-background-secondary)}
+.mic-btn.success{background:var(--color-background-success)}
+.mic-btn.error{background:var(--color-background-danger)}
+.mic-btn svg{width:40px;height:40px;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.mic-btn.listening svg{stroke:var(--color-text-info)}
+.mic-btn.idle svg{stroke:var(--color-text-tertiary)}
+.mic-btn.success svg{stroke:var(--color-text-success)}
+.mic-btn.error svg{stroke:var(--color-text-danger)}
+
+.mic-status-text{font-size:18px;font-weight:600;color:var(--color-text-primary);margin-bottom:6px}
+.mic-sub-text{font-size:13px;color:var(--color-text-secondary);text-align:center;line-height:1.5}
+
+/* ── Waveform ── */
+.waveform{display:flex;align-items:center;gap:4px;height:40px;margin:16px 0}
+.wbar{width:5px;border-radius:3px;background:var(--color-text-info)}
+
+/* ── Last command result ── */
+.result-card{width:100%;background:var(--color-background-info);border:0.5px solid var(--color-border-info);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.result-icon{width:36px;height:36px;border-radius:50%;background:var(--color-background-info);border:1.5px solid var(--color-border-info);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.result-icon svg{width:16px;height:16px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.result-phrase{font-size:15px;font-weight:600;color:var(--color-text-info);font-family:var(--font-mono)}
+.result-meta{font-size:11px;color:var(--color-text-info);opacity:.8;margin-top:2px}
+
+/* ── Command chips ── */
+.cmd-hint-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;align-self:flex-start}
+.cmd-chips{display:flex;gap:10px;width:100%;margin-bottom:28px}
+.cmd-chip{flex:1;padding:14px 12px;border-radius:14px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.cmd-chip:active{background:var(--color-background-tertiary)}
+.cmd-chip svg{width:20px;height:20px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cmd-chip.open svg{stroke:var(--color-text-success)}
+.cmd-chip.close svg{stroke:var(--color-text-danger)}
+.cmd-chip-text{font-size:13px;font-weight:600;color:var(--color-text-primary);font-family:var(--font-mono)}
+.cmd-chip-acc{font-size:11px;color:var(--color-text-tertiary)}
+
+/* ── Unavailable bar ── */
+.unavail-bar{width:100%;background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.unavail-bar svg{width:14px;height:14px;stroke:var(--color-text-warning);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.unavail-text{font-size:12px;color:var(--color-text-warning)}
+
+/* ── Log section ── */
+.log-section{width:100%}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.log-wrap{background:var(--color-background-secondary);border-radius:14px;padding:14px;border:0.5px solid var(--color-border-tertiary)}
+.log-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.log-row:last-child{border-bottom:none}
+.log-time{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono);width:52px;flex-shrink:0}
+.log-phrase{flex:1;font-size:12px;color:var(--color-text-primary);font-family:var(--font-mono)}
+.log-acc{font-size:11px;font-weight:500}
+.acc-g{color:var(--color-text-success)}
+.acc-a{color:var(--color-text-warning)}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px}
+</style>
+
+<div class="phone-wrap">
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time">13:55</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2" stroke-width="3"/></svg>
+    </div>
+  </div>
+
+  <!-- App bar -->
+  <div class="app-bar">
+    <div class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <span class="bar-title">Giọng nói</span>
+    <span class="bar-badge bb"><span class="dot" style="background:var(--color-text-info)"></span>Đang lắng nghe</span>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Last result -->
+    <div class="result-card">
+      <div class="result-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <div class="result-phrase">"Mở cửa"</div>
+        <div class="result-meta">Khớp 91% · Thực thi lúc 13:55:10 · Cửa đã mở</div>
+      </div>
+    </div>
+
+    <!-- Mic hero -->
+    <div class="mic-section">
+      <div class="mic-label">Nhấn để nói hoặc giữ yên — tự động nhận lệnh</div>
+
+      <div class="mic-outer listening">
+        <div class="mic-btn listening">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Waveform -->
+      <div class="waveform">
+        <div class="wbar" style="height:10px"></div>
+        <div class="wbar" style="height:22px"></div>
+        <div class="wbar" style="height:16px"></div>
+        <div class="wbar" style="height:32px"></div>
+        <div class="wbar" style="height:12px"></div>
+        <div class="wbar" style="height:26px"></div>
+        <div class="wbar" style="height:18px"></div>
+        <div class="wbar" style="height:30px"></div>
+        <div class="wbar" style="height:14px"></div>
+        <div class="wbar" style="height:20px"></div>
+        <div class="wbar" style="height:28px"></div>
+        <div class="wbar" style="height:10px"></div>
+      </div>
+
+      <div class="mic-status-text">Đang lắng nghe…</div>
+      <div class="mic-sub-text">Phát lệnh bằng tiếng Việt<br>Nhận dạng trong vòng 5 giây</div>
+    </div>
+
+    <!-- Command shortcut chips -->
+    <div class="cmd-hint-label">Lệnh hỗ trợ</div>
+    <div class="cmd-chips">
+      <div class="cmd-chip open">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        <span class="cmd-chip-text">"Mở cửa"</span>
+        <span class="cmd-chip-acc">tb 91%</span>
+      </div>
+      <div class="cmd-chip close">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span class="cmd-chip-text">"Đóng cửa"</span>
+        <span class="cmd-chip-acc">tb 89%</span>
+      </div>
+    </div>
+
+    <!-- Unavailable note -->
+    <div class="unavail-bar">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span class="unavail-text">Không khả dụng khi mất kết nối điện thoại — hệ thống chuyển sang mật mã</span>
+    </div>
+
+    <!-- Log -->
+    <div class="log-section">
+      <div class="section-label">Nhật ký hôm nay</div>
+      <div class="log-wrap">
+        <div class="log-row">
+          <span class="log-time">13:55</span>
+          <span class="log-phrase">"Mở cửa"</span>
+          <span class="badge bg">Thực thi</span>
+          <span class="log-acc acc-g">91%</span>
+        </div>
+        <div class="log-row">
+          <span class="log-time">11:10</span>
+          <span class="log-phrase">"Đóng cửa"</span>
+          <span class="badge bg">Thực thi</span>
+          <span class="log-acc acc-g">89%</span>
+        </div>
+        <div class="log-row">
+          <span class="log-time">09:30</span>
+          <span class="log-phrase">"Mở cửa"</span>
+          <span class="badge bx">Không khớp</span>
+          <span class="log-acc acc-a">72%</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-item" onclick="window.location.href='01 dashboard_tong_quan.html'">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Tổng quan</span>
+    </div>
+    <div class="tab-item" onclick="window.location.href='nhan_dien_khuon_mat.mobile.html'">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Khuôn mặt</span>
+    </div>
+    <div class="tab-item active" onclick="window.location.href='dieu_khien_giong_noi.mobile.html'">
+      <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+      <span>Giọng nói</span>
+    </div>
+    <div class="tab-item" onclick="window.location.href='canh_bao_khan_cap.mobile.html'">
+      <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      <span>Cảnh báo</span>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+</div><!-- /phone-wrap -->
+
+</body>
+</html>

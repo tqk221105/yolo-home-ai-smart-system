@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yolo Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:760px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary)}
+.sidebar-logo{padding:18px 20px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.nav{padding:12px 0}
+.nav-section{padding:4px 20px 6px;font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.07em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-left:2px solid transparent}
+.nav-item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.nav-item.active{color:var(--color-text-info);border-left-color:var(--color-border-info);background:var(--color-background-info)}
+.nav-item:hover:not(.active){background:var(--color-background-tertiary)}
+.nav-indent{padding-left:36px;font-size:12px}
+.main{padding:24px;background:var(--color-background-primary);overflow:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.page-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:12px;color:var(--color-text-tertiary);margin-bottom:18px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:12px 0}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.stat-key{font-size:12px;color:var(--color-text-secondary)}
+.stat-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px 18px;border:0.5px solid var(--color-border-tertiary)}
+.card-white{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px}
+
+.summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.scard{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.scard-num{font-size:22px;font-weight:500;line-height:1}
+.scard-lbl{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+
+.range-pills{display:flex;gap:6px;margin-bottom:16px}
+.rpill{font-size:11px;font-weight:500;padding:4px 12px;border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.rpill.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+
+.chart-wrap{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px 18px;margin-bottom:14px}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.chart-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.legend{display:flex;gap:14px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--color-text-secondary)}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+
+.chart-area{position:relative;height:130px;margin-bottom:6px}
+.chart-svg{width:100%;height:100%}
+.x-labels{display:flex;justify-content:space-between;padding:0 4px}
+.x-lbl{font-size:10px;color:var(--color-text-tertiary)}
+
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 2px;margin-bottom:6px}
+.bar-group{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.bar-inner{display:flex;gap:2px;align-items:flex-end;width:100%}
+.bar{border-radius:2px 2px 0 0;flex:1;min-height:2px}
+.bar-lbl{font-size:9px;color:var(--color-text-tertiary);text-align:center}
+
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.log-table{width:100%;border-collapse:collapse}
+.log-table th{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.06em;padding:0 0 8px;text-align:left;border-bottom:0.5px solid var(--color-border-tertiary)}
+.log-table td{font-size:12px;color:var(--color-text-primary);padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.log-table tr:last-child td{border-bottom:none}
+.log-table td.muted{color:var(--color-text-secondary);font-family:var(--font-mono)}
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="logo-text">Yolo:Home</span>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Chính</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cửa & bảo mật
+      </div>
+      <div class="nav-section">Thiết bị</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Điều khiển
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Ngưỡng tự động
+      </div>
+      <div class="nav-section">Bảo mật</div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+        Mật mã
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Khuôn mặt
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        Giọng nói
+      </div>
+      <div class="nav-section">Hệ thống</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Cảnh báo
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Lịch sử
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Cài đặt
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Lịch sử & thống kê</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:12px;color:var(--color-text-tertiary)">Hôm nay, 08/04/2026</span>
+      </div>
+    </div>
+    <div class="page-sub">Dữ liệu sensor, sự kiện cửa, cảnh báo — cập nhật mỗi 5 giây</div>
+
+    <div class="summary-grid">
+      <div class="scard">
+        <div class="scard-num" style="color:var(--color-text-warning)">32°C</div>
+        <div class="scard-lbl">Nhiệt độ tb hôm nay</div>
+      </div>
+      <div class="scard">
+        <div class="scard-num" style="color:var(--color-text-info)">65%</div>
+        <div class="scard-lbl">Độ ẩm tb hôm nay</div>
+      </div>
+      <div class="scard">
+        <div class="scard-num">12</div>
+        <div class="scard-lbl">Lần mở cửa hôm nay</div>
+      </div>
+      <div class="scard">
+        <div class="scard-num" style="color:var(--color-text-danger)">4</div>
+        <div class="scard-lbl">Sự kiện cảnh báo</div>
+      </div>
+    </div>
+
+    <div class="range-pills">
+      <span class="rpill active">Hôm nay</span>
+      <span class="rpill">7 ngày</span>
+      <span class="rpill">30 ngày</span>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-header">
+        <span class="chart-title">Nhiệt độ & độ ẩm theo giờ</span>
+        <div class="legend">
+          <div class="leg-item"><div class="leg-dot" style="background:#ef9f27"></div>Nhiệt độ (°C)</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#378add"></div>Độ ẩm (%)</div>
+        </div>
+      </div>
+      <div class="chart-area">
+        <svg class="chart-svg" viewBox="0 0 520 120" preserveAspectRatio="none">
+          <line x1="0" y1="90" x2="520" y2="90" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+          <line x1="0" y1="60" x2="520" y2="60" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+          <line x1="0" y1="30" x2="520" y2="30" stroke="var(--color-border-tertiary)" stroke-width="0.5"/>
+          <text x="0" y="93" font-size="8" fill="var(--color-text-tertiary)">20</text>
+          <text x="0" y="63" font-size="8" fill="var(--color-text-tertiary)">28</text>
+          <text x="0" y="33" font-size="8" fill="var(--color-text-tertiary)">36</text>
+          <polyline points="20,85 65,80 110,75 155,70 200,68 245,65 290,62 335,60 380,58 425,60 470,63 515,65" fill="none" stroke="#ef9f27" stroke-width="2" stroke-linejoin="round"/>
+          <polyline points="20,55 65,52 110,50 155,48 200,50 245,53 290,55 335,52 380,50 425,48 470,52 515,55" fill="none" stroke="#378add" stroke-width="2" stroke-linejoin="round"/>
+
+        </svg>
+      </div>
+      <div class="x-labels">
+        <span class="x-lbl">06:00</span>
+        <span class="x-lbl">08:00</span>
+        <span class="x-lbl">10:00</span>
+        <span class="x-lbl">12:00</span>
+        <span class="x-lbl">14:00</span>
+        <span class="x-lbl">16:00</span>
+      </div>
+    </div>
+
+    <div class="cols2">
+      <div>
+        <div class="section-label">Lần mở cửa theo phương thức</div>
+        <div class="chart-wrap">
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar-inner">
+                <div class="bar" style="height:80px;background:#1d9e75"></div>
+              </div>
+              <div class="bar-lbl">Khuôn mặt</div>
+              <div class="bar-lbl" style="font-weight:500;color:var(--color-text-primary)">7</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-inner">
+                <div class="bar" style="height:34px;background:#378add"></div>
+              </div>
+              <div class="bar-lbl">Mật mã</div>
+              <div class="bar-lbl" style="font-weight:500;color:var(--color-text-primary)">3</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-inner">
+                <div class="bar" style="height:23px;background:#ef9f27"></div>
+              </div>
+              <div class="bar-lbl">Giọng nói</div>
+              <div class="bar-lbl" style="font-weight:500;color:var(--color-text-primary)">2</div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-inner">
+                <div class="bar" style="height:11px;background:#e24b4a"></div>
+              </div>
+              <div class="bar-lbl">Thất bại</div>
+              <div class="bar-lbl" style="font-weight:500;color:var(--color-text-danger)">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Sự kiện cảnh báo hôm nay</div>
+        <div class="card-white">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th style="width:80px">Giờ</th>
+                <th>Sự kiện</th>
+                <th style="width:80px">Mức độ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="muted">14:10</td>
+                <td style="font-size:12px">Phát hiện người lạ tại cửa</td>
+                <td><span class="badge ba">Cảnh báo</span></td>
+              </tr>
+              <tr>
+                <td class="muted">13:40</td>
+                <td style="font-size:12px">Nhận diện khuôn mặt thất bại</td>
+                <td><span class="badge ba">Cảnh báo</span></td>
+              </tr>
+              <tr>
+                <td class="muted">11:48</td>
+                <td style="font-size:12px">Khóa tạm thời — sai mật mã 3 lần</td>
+                <td><span class="badge bd">Nguy hiểm</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Toàn bộ lịch sử mở cửa hôm nay</div>
+    <div class="card-white">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th style="width:90px">Thời gian</th>
+            <th style="width:150px">Phương thức</th>
+            <th style="width:100px">Kết quả</th>
+            <th>Người / Lệnh</th>
+            <th style="width:80px">Độ tin cậy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="muted">14:28:03</td>
+            <td><span class="badge bg">Khuôn mặt</span></td>
+            <td><span class="badge bg">Thành công</span></td>
+            <td style="font-size:12px;color:var(--color-text-secondary)">Thiên Nguyễn</td>
+            <td style="font-size:12px;color:var(--color-text-success)">96%</td>
+          </tr>
+          <tr>
+            <td class="muted">14:10:45</td>
+            <td><span class="badge bb">Mật mã</span></td>
+            <td><span class="badge bd">Thất bại</span></td>
+            <td style="font-size:12px;color:var(--color-text-secondary)">Nhập sai lần 2</td>
+            <td style="font-size:12px;color:var(--color-text-tertiary)">—</td>
+          </tr>
+          <tr>
+            <td class="muted">13:55:10</td>
+            <td><span class="badge ba">Giọng nói</span></td>
+            <td><span class="badge bg">Thành công</span></td>
+            <td style="font-size:12px;color:var(--color-text-secondary)">"Mở cửa"</td>
+            <td style="font-size:12px;color:var(--color-text-success)">91%</td>
+          </tr>
+          <tr>
+            <td class="muted">13:40:02</td>
+            <td><span class="badge bg">Khuôn mặt</span></td>
+            <td><span class="badge bd">Thất bại</span></td>
+            <td style="font-size:12px;color:var(--color-text-danger)">Người lạ — 34%</td>
+            <td style="font-size:12px;color:var(--color-text-danger)">34%</td>
+          </tr>
+          <tr>
+            <td class="muted">11:53:10</td>
+            <td><span class="badge bb">Mật mã</span></td>
+            <td><span class="badge bg">Thành công</span></td>
+            <td style="font-size:12px;color:var(--color-text-secondary)">Sau khi hết khóa</td>
+            <td style="font-size:12px;color:var(--color-text-tertiary)">—</td>
+          </tr>
+          <tr>
+            <td class="muted">11:30:44</td>
+            <td><span class="badge bg">Khuôn mặt</span></td>
+            <td><span class="badge bg">Thành công</span></td>
+            <td style="font-size:12px;color:var(--color-text-secondary)">Bảo Trân</td>
+            <td style="font-size:12px;color:var(--color-text-warning)">87%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yolo Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:700px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary)}
+.sidebar-logo{padding:18px 20px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.nav{padding:12px 0}
+.nav-section{padding:4px 20px 6px;font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.07em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-left:2px solid transparent}
+.nav-item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.nav-item.active{color:var(--color-text-info);border-left-color:var(--color-border-info);background:var(--color-background-info)}
+.nav-item:hover:not(.active){background:var(--color-background-tertiary)}
+.main{padding:24px;background:var(--color-background-primary)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.page-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:12px;color:var(--color-text-tertiary);margin-bottom:20px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px}
+.device-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px}
+.dcard{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:18px 20px;border:0.5px solid var(--color-border-tertiary)}
+.dcard.override{border-color:var(--color-border-warning);background:var(--color-background-warning)}
+.dcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.dcard-left{display:flex;align-items:center;gap:12px}
+.dicon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dicon svg{width:20px;height:20px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.di-on{background:var(--color-background-success)}
+.di-on svg{stroke:var(--color-text-success)}
+.di-off{background:var(--color-background-tertiary)}
+.di-off svg{stroke:var(--color-text-tertiary)}
+.di-warn{background:var(--color-background-warning)}
+.di-warn svg{stroke:var(--color-text-warning)}
+.di-red{background:var(--color-background-danger)}
+.di-red svg{stroke:var(--color-text-danger)}
+.dname{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.dmode{font-size:11px;color:var(--color-text-secondary);margin-top:3px}
+.toggle{width:42px;height:24px;border-radius:12px;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s}
+.ton{background:#22c55e}
+.toff{background:var(--color-border-secondary)}
+.tthumb{width:18px;height:18px;border-radius:50%;background:var(--color-background-primary);position:absolute;top:3px;transition:left 0.15s}
+.ton .tthumb{left:21px}
+.toff .tthumb{left:3px}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:12px 0}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.stat-key{font-size:12px;color:var(--color-text-secondary)}
+.stat-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.override-chip{font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px;background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning)}
+.slider-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.slider-row label{font-size:11px;color:var(--color-text-secondary);white-space:nowrap;min-width:70px}
+.slider-row input[type=range]{flex:1}
+.slider-row .val{font-size:12px;font-weight:500;color:var(--color-text-primary);min-width:32px;text-align:right}
+.remote-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px}
+.remote-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.rkey{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 6px;text-align:center;cursor:pointer;font-size:12px;color:var(--color-text-secondary)}
+.rkey:hover{background:var(--color-background-tertiary)}
+.rkey.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.rkey-label{font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+.lcd-box{background:var(--color-background-tertiary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;font-family:var(--font-mono);font-size:13px;color:var(--color-text-secondary);line-height:1.9;margin-top:10px}
+.response-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--border-radius-md);margin-top:10px;background:var(--color-background-success);border:0.5px solid var(--color-border-success)}
+.response-text{font-size:12px;color:var(--color-text-success);font-weight:500}
+.response-time{font-size:11px;color:var(--color-text-success);margin-left:auto;opacity:0.75}
+.nav-indent{padding-left:36px;font-size:12px}
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="logo-text">Yolo:Home</span>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Chính</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cửa & bảo mật
+      </div>
+      <div class="nav-section">Thiết bị</div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Điều khiển
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Ngưỡng tự động
+      </div>
+      <div class="nav-section">Bảo mật</div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+        Mật mã
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Khuôn mặt
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        Giọng nói
+      </div>
+      <div class="nav-section">Hệ thống</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Cảnh báo
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Lịch sử
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Cài đặt
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Điều khiển thủ công</div>
+      <span class="badge bb">UC09 — Remote IR</span>
+    </div>
+    <div class="page-sub">Ghi đè chế độ tự động — lệnh thực thi trong vòng 2 giây (NFR1)</div>
+
+    <div class="section-label">Thiết bị</div>
+    <div class="device-grid">
+
+      <div class="dcard override">
+        <div class="dcard-top">
+          <div class="dcard-left">
+            <div class="dicon di-on">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            <div>
+              <div class="dname">Đèn LED trắng</div>
+              <div class="dmode">Bật thủ công — ghi đè tự động</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+            <div class="toggle ton" id="t-den"><div class="tthumb"></div></div>
+            <span class="override-chip">Ghi đè</span>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-row"><span class="stat-key">Chế độ</span><span class="ba">Thủ công</span></div>
+        <div class="stat-row"><span class="stat-key">Ánh sáng hiện tại</span><span class="stat-val">142 lux</span></div>
+        <div class="stat-row"><span class="stat-key">Ngưỡng tự động</span><span class="stat-val">200 lux</span></div>
+        <div class="stat-row"><span class="stat-key">Phím remote</span><span class="stat-val" style="font-family:var(--font-mono)">BTN_1</span></div>
+      </div>
+
+      <div class="dcard">
+        <div class="dcard-top">
+          <div class="dcard-left">
+            <div class="dicon di-on">
+              <svg viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg>
+            </div>
+            <div>
+              <div class="dname">Quạt mini</div>
+              <div class="dmode">Bật tự động — nhiệt độ vượt 30°C</div>
+            </div>
+          </div>
+          <div class="toggle ton" id="t-quat"><div class="tthumb"></div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-row"><span class="stat-key">Chế độ</span><span class="bg">Tự động</span></div>
+        <div class="stat-row"><span class="stat-key">Nhiệt độ hiện tại</span><span class="stat-val">32°C</span></div>
+        <div class="stat-row"><span class="stat-key">Ngưỡng tự động</span><span class="stat-val">30°C</span></div>
+        <div class="stat-row"><span class="stat-key">Phím remote</span><span class="stat-val" style="font-family:var(--font-mono)">BTN_2</span></div>
+      </div>
+
+      <div class="dcard">
+        <div class="dcard-top">
+          <div class="dcard-left">
+            <div class="dicon di-warn">
+              <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div>
+              <div class="dname">Relay</div>
+              <div class="dmode">Bật thủ công</div>
+            </div>
+          </div>
+          <div class="toggle ton" id="t-relay"><div class="tthumb"></div></div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat-row"><span class="stat-key">Chế độ</span><span class="ba">Thủ công</span></div>
+        <div class="stat-row"><span class="stat-key">Trạng thái</span><span class="stat-val">Đóng mạch</span></div>
+        <div class="stat-row"><span class="stat-key">Phím remote</span><span class="stat-val" style="font-family:var(--font-mono)">BTN_3</span></div>
+      </div>
+
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div class="section-label">Mô phỏng remote IR</div>
+        <div class="remote-box">
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">Nhấn phím để gửi lệnh IR — mắt thu nhận tín hiệu &lt; 2s</div>
+          <div class="remote-grid">
+            <div style="text-align:center">
+              <div class="rkey active">1</div>
+              <div class="rkey-label">Đèn</div>
+            </div>
+            <div style="text-align:center">
+              <div class="rkey">2</div>
+              <div class="rkey-label">Quạt</div>
+            </div>
+            <div style="text-align:center">
+              <div class="rkey">3</div>
+              <div class="rkey-label">Relay</div>
+            </div>
+            <div style="text-align:center">
+              <div class="rkey">5</div>
+              <div class="rkey-label">Tất cả bật</div>
+            </div>
+            <div style="text-align:center">
+              <div class="rkey">6</div>
+              <div class="rkey-label">Tất cả tắt</div>
+            </div>
+            <div style="text-align:center">
+              <div class="rkey">*</div>
+              <div class="rkey-label">Mật mã</div>
+            </div>
+            <div style="text-align:center">
+              <div class="rkey">#</div>
+              <div class="rkey-label">Reset</div>
+            </div>
+          </div>
+          <div class="response-bar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="response-text">BTN_1 nhận — Đèn LED bật thành công</span>
+            <span class="response-time">0.3s</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">LCD 16×2 — trạng thái hiện tại</div>
+        <div class="remote-box">
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">Màn hình LCD cập nhật sau mỗi lệnh (UC09)</div>
+          <div class="lcd-box">
+            <div style="display:flex;justify-content:space-between"><span>LED:ON  FAN:ON</span></div>
+            <div style="display:flex;justify-content:space-between"><span>RLY:ON</span></div>
+          </div>
+          <div class="divider"></div>
+          <div class="stat-row"><span class="stat-key">Lệnh cuối</span><span class="stat-val" style="font-family:var(--font-mono)">BTN_1 — bật đèn</span></div>
+          <div class="stat-row"><span class="stat-key">Thời gian phản hồi</span><span class="stat-val">0.3s / 2s giới hạn</span></div>
+          <div class="stat-row"><span class="stat-key">Tín hiệu IR</span><span class="badge bg"><span class="dot"></span>Tốt</span></div>
+          <div class="stat-row"><span class="stat-key">Mắt thu IR</span><span class="badge bg"><span class="dot"></span>Online</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

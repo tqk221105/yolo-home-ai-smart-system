@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yolo Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:700px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary)}
+.sidebar-logo{padding:18px 20px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.nav{padding:12px 0}
+.nav-section{padding:4px 20px 6px;font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.07em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-left:2px solid transparent}
+.nav-item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.nav-item.active{color:var(--color-text-info);border-left-color:var(--color-border-info);background:var(--color-background-info)}
+.nav-item:hover:not(.active){background:var(--color-background-tertiary)}
+.nav-indent{padding-left:36px;font-size:12px}
+.main{padding:24px;background:var(--color-background-primary)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.page-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:12px;color:var(--color-text-tertiary);margin-bottom:20px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:12px 0}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+.stat-key{font-size:12px;color:var(--color-text-secondary)}
+.stat-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px 18px;border:0.5px solid var(--color-border-tertiary)}
+.card-white{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px}
+
+.mic-panel{display:flex;flex-direction:column;align-items:center;padding:20px 0 16px;gap:12px}
+.mic-ring{width:80px;height:80px;border-radius:50%;border:2px solid var(--color-border-success);display:flex;align-items:center;justify-content:center;position:relative}
+.mic-ring.listening{border-color:var(--color-border-info)}
+.mic-ring.offline{border-color:var(--color-border-tertiary)}
+.mic-btn{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.mic-on{background:var(--color-background-success)}
+.mic-listening{background:var(--color-background-info)}
+.mic-off{background:var(--color-background-tertiary)}
+.mic-btn svg{width:26px;height:26px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.mic-on svg{stroke:var(--color-text-success)}
+.mic-listening svg{stroke:var(--color-text-info)}
+.mic-off svg{stroke:var(--color-text-tertiary)}
+.mic-status{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.mic-sub{font-size:12px;color:var(--color-text-secondary);text-align:center}
+.waveform{display:flex;align-items:center;gap:3px;height:32px}
+.wbar{width:4px;border-radius:2px;background:var(--color-text-info)}
+
+.cmd-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.cmd-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)}
+.cmd-item.active-cmd{border-color:var(--color-border-info);background:var(--color-background-info)}
+.cmd-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cmd-icon svg{width:15px;height:15px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.ci-green{background:var(--color-background-success)}.ci-green svg{stroke:var(--color-text-success)}
+.ci-red{background:var(--color-background-danger)}.ci-red svg{stroke:var(--color-text-danger)}
+.ci-blue{background:var(--color-background-info)}.ci-blue svg{stroke:var(--color-text-info)}
+.ci-amber{background:var(--color-background-warning)}.ci-amber svg{stroke:var(--color-text-warning)}
+.ci-gray{background:var(--color-background-tertiary)}.ci-gray svg{stroke:var(--color-text-tertiary)}
+.cmd-phrase{font-size:13px;font-weight:500;color:var(--color-text-primary);font-family:var(--font-mono)}
+.cmd-desc{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.cmd-acc{font-size:11px;font-weight:500;margin-left:auto}
+.acc-g{color:var(--color-text-success)}
+.acc-a{color:var(--color-text-warning)}
+
+.log-table{width:100%;border-collapse:collapse}
+.log-table th{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.06em;padding:0 0 8px;text-align:left;border-bottom:0.5px solid var(--color-border-tertiary)}
+.log-table td{font-size:12px;color:var(--color-text-primary);padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.log-table tr:last-child td{border-bottom:none}
+.log-table td.muted{color:var(--color-text-secondary);font-family:var(--font-mono)}
+
+.test-box{background:var(--color-background-info);border:0.5px solid var(--color-border-info);border-radius:var(--border-radius-md);padding:12px 14px;margin-top:12px;display:flex;align-items:center;gap:10px}
+.test-box svg{width:14px;height:14px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.test-text{font-size:12px;color:var(--color-text-info)}
+.test-phrase{font-family:var(--font-mono);font-weight:500}
+.unavail-bar{background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.unavail-bar svg{width:14px;height:14px;stroke:var(--color-text-warning);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.unavail-text{font-size:12px;color:var(--color-text-warning)}
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="logo-text">Yolo:Home</span>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Chính</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cửa & bảo mật
+      </div>
+      <div class="nav-section">Thiết bị</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Điều khiển
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Ngưỡng tự động
+      </div>
+      <div class="nav-section">Bảo mật</div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+        Mật mã
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Khuôn mặt
+      </div>
+      <div class="nav-item active nav-indent">
+        <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        Giọng nói
+      </div>
+      <div class="nav-section">Hệ thống</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Cảnh báo
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Lịch sử
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Cài đặt
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Cài đặt giọng nói</div>
+      <span class="badge bg"><span class="dot"></span>Micro online · Điện thoại kết nối</span>
+    </div>
+    <div class="page-sub">UC07 — Cấu hình nhận diện giọng nói · Ra lệnh trực tiếp thực hiện trên ứng dụng điện thoại</div>
+
+    <div class="cols">
+      <div>
+        <div class="section-label">Trạng thái kết nối</div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="stat-row"><span class="stat-key">Kết nối điện thoại</span><span class="badge bg"><span class="dot"></span>Online</span></div>
+          <div class="stat-row"><span class="stat-key">Chất lượng micro</span><span class="stat-val">Tốt (-18 dB)</span></div>
+          <div class="stat-row"><span class="stat-key">Ngôn ngữ</span><span class="stat-val">Tiếng Việt</span></div>
+          <div class="stat-row"><span class="stat-key">Ngưỡng chấp nhận</span><span class="stat-val">≥ 85%</span></div>
+          <div class="stat-row"><span class="stat-key">Timeout mỗi lần nghe</span><span class="stat-val">5 giây</span></div>
+        </div>
+
+        <div class="card" style="display:flex;align-items:center;gap:12px;padding:14px 18px;margin-bottom:14px">
+          <div style="width:36px;height:36px;border-radius:8px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--color-text-info);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px">Ra lệnh giọng nói trên điện thoại</div>
+            <div style="font-size:12px;color:var(--color-text-secondary)">Mở <strong>dieu_khien_giong_noi.mobile</strong> để nói "Mở cửa" hoặc "Đóng cửa"</div>
+          </div>
+        </div>
+
+        <div class="section-label">Cấu hình</div>
+        <div class="card">
+          <div class="stat-row">
+            <span class="stat-key">Chế độ lắng nghe</span>
+            <span class="badge bg"><span class="dot"></span>Luôn bật</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">Kích hoạt khi mất kết nối</span>
+            <span class="badge bd">Không khả dụng</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">Phản hồi qua LCD</span>
+            <span class="badge bg"><span class="dot"></span>Bật</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">Xác nhận bằng buzzer</span>
+            <span class="badge bg"><span class="dot"></span>Bật</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Danh sách lệnh hỗ trợ</div>
+        <div class="cmd-list">
+          <div class="cmd-item active-cmd">
+            <div class="cmd-icon ci-green">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div class="cmd-phrase">"Mở cửa"</div>
+              <div class="cmd-desc">Kích hoạt động cơ RC mở cửa</div>
+            </div>
+            <div class="cmd-acc acc-g">91% tb</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-icon ci-red">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div class="cmd-phrase">"Đóng cửa"</div>
+              <div class="cmd-desc">Kích hoạt động cơ RC đóng cửa</div>
+            </div>
+            <div class="cmd-acc acc-g">89% tb</div>
+          </div>
+        </div>
+
+        <div class="unavail-bar">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span class="unavail-text">Chức năng giọng nói không khả dụng khi mất kết nối điện thoại — hệ thống tự chuyển sang mật mã</span>
+        </div>
+
+        <div class="section-label">Log nhận diện hôm nay</div>
+        <div class="card-white">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th style="width:80px">Giờ</th>
+                <th>Lệnh nghe được</th>
+                <th style="width:70px">Kết quả</th>
+                <th style="width:60px">Độ khớp</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="muted">13:55:10</td>
+                <td style="font-size:12px;font-family:var(--font-mono)">"Mở cửa"</td>
+                <td><span class="badge bg">Thực thi</span></td>
+                <td style="font-size:12px;color:var(--color-text-success)">91%</td>
+              </tr>
+              <tr>
+                <td class="muted">11:10:05</td>
+                <td style="font-size:12px;font-family:var(--font-mono)">"Đóng cửa"</td>
+                <td><span class="badge bg">Thực thi</span></td>
+                <td style="font-size:12px;color:var(--color-text-success)">89%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

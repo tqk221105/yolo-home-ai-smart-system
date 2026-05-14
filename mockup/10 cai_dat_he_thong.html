@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yolo Home</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:760px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sidebar{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary)}
+.sidebar-logo{padding:18px 20px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px}
+.logo-mark{width:28px;height:28px;border-radius:8px;background:var(--color-background-info);display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.logo-text{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.nav{padding:12px 0}
+.nav-section{padding:4px 20px 6px;font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.07em;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-left:2px solid transparent}
+.nav-item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.nav-item.active{color:var(--color-text-info);border-left-color:var(--color-border-info);background:var(--color-background-info)}
+.nav-item:hover:not(.active){background:var(--color-background-tertiary)}
+.nav-indent{padding-left:36px;font-size:12px}
+.main{padding:24px;background:var(--color-background-primary)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.page-title{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:12px;color:var(--color-text-tertiary);margin-bottom:20px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:12px 0}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0}
+.stat-key{font-size:12px;color:var(--color-text-secondary)}
+.stat-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:16px 18px;border:0.5px solid var(--color-border-tertiary)}
+.card-white{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px 18px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+
+.sensor-card{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.sensor-card.ok{border-color:var(--color-border-success)}
+.sensor-card.warn{border-color:var(--color-border-warning)}
+.sensor-card.err{border-color:var(--color-border-danger)}
+.sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sc-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.sc-icon svg{width:16px;height:16px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.si-g{background:var(--color-background-success)}.si-g svg{stroke:var(--color-text-success)}
+.si-a{background:var(--color-background-warning)}.si-a svg{stroke:var(--color-text-warning)}
+.si-r{background:var(--color-background-danger)}.si-r svg{stroke:var(--color-text-danger)}
+.si-b{background:var(--color-background-info)}.si-b svg{stroke:var(--color-text-info)}
+.sc-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.sc-pin{font-size:10px;color:var(--color-text-tertiary);font-family:var(--font-mono)}
+.sc-val{font-size:18px;font-weight:500;color:var(--color-text-primary);line-height:1;margin-top:6px}
+.sc-unit{font-size:11px;color:var(--color-text-secondary);margin-left:2px}
+.sc-uptime{font-size:10px;color:var(--color-text-tertiary);margin-top:4px}
+
+.conn-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.conn-row:last-child{border-bottom:none}
+.conn-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.conn-icon svg{width:16px;height:16px;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.conn-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.conn-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.conn-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.uptime-bar{height:3px;border-radius:2px;background:var(--color-border-tertiary);width:80px;overflow:hidden}
+.uptime-fill{height:100%;border-radius:2px}
+
+.toggle{width:38px;height:22px;border-radius:11px;position:relative;cursor:pointer;flex-shrink:0}
+.ton{background:#22c55e}.toff{background:var(--color-border-secondary)}
+.tthumb{width:16px;height:16px;border-radius:50%;background:var(--color-background-primary);position:absolute;top:3px}
+.ton .tthumb{left:19px}.toff .tthumb{left:3px}
+
+.mode-card{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:14px 16px;border:0.5px solid var(--color-border-tertiary);margin-bottom:10px}
+.mode-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.mode-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.mode-desc{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+
+.hw-table{width:100%;border-collapse:collapse}
+.hw-table td{font-size:12px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.hw-table tr:last-child td{border-bottom:none}
+.hw-table td:first-child{color:var(--color-text-secondary);width:45%}
+.hw-table td:last-child{color:var(--color-text-primary);font-weight:500;text-align:right}
+
+.danger-zone{background:var(--color-background-danger);border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-lg);padding:14px 18px;margin-top:14px}
+.dz-title{font-size:12px;font-weight:500;color:var(--color-text-danger);margin-bottom:8px}
+.dz-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--color-border-danger)}
+.dz-row:last-child{border-bottom:none}
+.dz-label{font-size:12px;color:var(--color-text-danger)}
+.btn-ghost-danger{font-size:11px;padding:4px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-danger);background:transparent;color:var(--color-text-danger);cursor:pointer}
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="logo-text">Yolo:Home</span>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Chính</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cửa & bảo mật
+      </div>
+      <div class="nav-section">Thiết bị</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Điều khiển
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        Ngưỡng tự động
+      </div>
+      <div class="nav-section">Bảo mật</div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+        Mật mã
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Khuôn mặt
+      </div>
+      <div class="nav-item nav-indent">
+        <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        Giọng nói
+      </div>
+      <div class="nav-section">Hệ thống</div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Cảnh báo
+      </div>
+      <div class="nav-item">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Lịch sử
+      </div>
+      <div class="nav-item active">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Cài đặt
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title">Cài đặt hệ thống</div>
+      <span class="badge bg"><span class="dot"></span>Tất cả cảm biến online · Uptime 6h 42m</span>
+    </div>
+    <div class="page-sub">Trạng thái phần cứng Yolo:Bit, kết nối điện thoại, chế độ dự phòng — UC06 · UC07 · UC08</div>
+
+    <div class="section-label">Trạng thái cảm biến</div>
+    <div class="cols3">
+      <div class="sensor-card ok">
+        <div class="sc-top">
+          <div>
+            <div class="sc-name">DHT20</div>
+            <div class="sc-pin">Pin A0 · I2C</div>
+          </div>
+          <div class="sc-icon si-g">
+            <svg viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg>
+          </div>
+        </div>
+        <div><span class="sc-val">32</span><span class="sc-unit">°C</span> &nbsp; <span class="sc-val">68</span><span class="sc-unit">%</span></div>
+        <div class="sc-uptime">Cập nhật mỗi 5s · OK</div>
+      </div>
+      <div class="sensor-card warn">
+        <div class="sc-top">
+          <div>
+            <div class="sc-name">MQ135</div>
+            <div class="sc-pin">Pin A1 · Analog</div>
+          </div>
+          <div class="sc-icon si-a">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+        </div>
+        <div><span class="sc-val" style="color:var(--color-text-danger)">420</span><span class="sc-unit">ppm</span></div>
+        <div class="sc-uptime" style="color:var(--color-text-warning)">Vượt ngưỡng · Cảnh báo đang kích hoạt</div>
+      </div>
+      <div class="sensor-card ok">
+        <div class="sc-top">
+          <div>
+            <div class="sc-name">Cảm biến ánh sáng</div>
+            <div class="sc-pin">Pin A2 · Analog</div>
+          </div>
+          <div class="sc-icon si-b">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+          </div>
+        </div>
+        <div><span class="sc-val">142</span><span class="sc-unit">lux</span></div>
+        <div class="sc-uptime">Cập nhật mỗi 5s · OK</div>
+      </div>
+      <div class="sensor-card ok">
+        <div class="sc-top">
+          <div>
+            <div class="sc-name">PIR</div>
+            <div class="sc-pin">Pin D3 · Digital</div>
+          </div>
+          <div class="sc-icon si-g">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+        </div>
+        <div><span class="badge bg"><span class="dot"></span>Phát hiện người</span></div>
+        <div class="sc-uptime">Tầm phát hiện · Hiệu chỉnh OK</div>
+      </div>
+      <div class="sensor-card ok">
+        <div class="sc-top">
+          <div>
+            <div class="sc-name">Mắt thu IR</div>
+            <div class="sc-pin">Pin D4 · Digital</div>
+          </div>
+          <div class="sc-icon si-g">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+        </div>
+        <div><span class="badge bg"><span class="dot"></span>Online</span></div>
+        <div class="sc-uptime">Sẵn sàng nhận tín hiệu remote</div>
+      </div>
+      <div class="sensor-card ok">
+        <div class="sc-top">
+          <div>
+            <div class="sc-name">LCD 16×2 & Relay</div>
+            <div class="sc-pin">I2C · Pin D5</div>
+          </div>
+          <div class="sc-icon si-g">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+        </div>
+        <div><span class="badge bg"><span class="dot"></span>Hiển thị bình thường</span></div>
+        <div class="sc-uptime">Relay: đóng mạch · LED RGB: đỏ</div>
+      </div>
+    </div>
+
+    <div class="cols2">
+      <div>
+        <div class="section-label">Kết nối & chế độ dự phòng</div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="conn-row">
+            <div class="conn-icon si-g">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text-success)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <div>
+              <div class="conn-name">Điện thoại (camera + micro)</div>
+              <div class="conn-sub">Kết nối Bluetooth · UC06 · UC07</div>
+            </div>
+            <div class="conn-right">
+              <span class="badge bg"><span class="dot"></span>Online</span>
+              <div class="uptime-bar"><div class="uptime-fill" style="width:95%;background:#22c55e"></div></div>
+              <span style="font-size:10px;color:var(--color-text-tertiary)">Uptime 95%</span>
+            </div>
+          </div>
+          <div class="conn-row">
+            <div class="conn-icon si-g">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text-success)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+            </div>
+            <div>
+              <div class="conn-name">Yolo:Bit (vi điều khiển)</div>
+              <div class="conn-sub">USB Serial · 115200 baud</div>
+            </div>
+            <div class="conn-right">
+              <span class="badge bg"><span class="dot"></span>Online</span>
+              <div class="uptime-bar"><div class="uptime-fill" style="width:100%;background:#22c55e"></div></div>
+              <span style="font-size:10px;color:var(--color-text-tertiary)">Uptime 100%</span>
+            </div>
+          </div>
+          <div class="conn-row">
+            <div class="conn-icon si-b">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-text-info)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+            </div>
+            <div>
+              <div class="conn-name">Micro điện thoại</div>
+              <div class="conn-sub">Nhận diện giọng nói · UC07</div>
+            </div>
+            <div class="conn-right">
+              <span class="badge bg"><span class="dot"></span>Online</span>
+              <div class="uptime-bar"><div class="uptime-fill" style="width:88%;background:#22c55e"></div></div>
+              <span style="font-size:10px;color:var(--color-text-tertiary)">Uptime 88%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Chế độ vận hành</div>
+        <div class="mode-card">
+          <div class="mode-header">
+            <div class="mode-title">Chế độ đầy đủ</div>
+            <span class="badge bg"><span class="dot"></span>Đang hoạt động</span>
+          </div>
+          <div class="mode-desc">Điện thoại kết nối — khuôn mặt, giọng nói, mật mã đều khả dụng.</div>
+        </div>
+        <div class="mode-card" style="opacity:0.55">
+          <div class="mode-header">
+            <div class="mode-title">Chế độ dự phòng (NFR3)</div>
+            <span class="badge bx">Không hoạt động</span>
+          </div>
+          <div class="mode-desc">Mất kết nối điện thoại — tự động chuyển, chỉ còn mật mã remote IR.</div>
+        </div>
+        <div class="mode-card" style="opacity:0.55">
+          <div class="mode-header">
+            <div class="mode-title">Chế độ khóa tạm thời (NFR4)</div>
+            <span class="badge bx">Không hoạt động</span>
+          </div>
+          <div class="mode-desc">Nhập sai mật mã 3 lần — khóa 5 phút, kích hoạt cảnh báo buzzer.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Thông tin phần cứng</div>
+        <div class="card-white" style="margin-bottom:14px">
+          <table class="hw-table">
+            <tr><td>Bo mạch</td><td>Yolo:Bit v2</td></tr>
+            <tr><td>Firmware</td><td>v1.3.2 — mới nhất</td></tr>
+            <tr><td>Uptime hệ thống</td><td>6h 42m 18s</td></tr>
+            <tr><td>Chu kỳ đọc sensor</td><td>5 giây (NFR2)</td></tr>
+            <tr><td>Bộ nhớ flash</td><td>72% còn trống</td></tr>
+            <tr><td>Nhiệt độ bo mạch</td><td>38°C — bình thường</td></tr>
+            <tr><td>Nguồn điện</td><td>5V USB · Ổn định</td></tr>
+          </table>
+        </div>
+
+        <div class="section-label">Cài đặt chung</div>
+        <div class="card">
+          <div class="stat-row">
+            <span class="stat-key">Chu kỳ cập nhật LCD</span>
+            <div class="toggle ton"><div class="tthumb"></div></div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">Âm thanh xác nhận buzzer</span>
+            <div class="toggle ton"><div class="tthumb"></div></div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">LED RGB trạng thái</span>
+            <div class="toggle ton"><div class="tthumb"></div></div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">Ghi log sự kiện</span>
+            <div class="toggle ton"><div class="tthumb"></div></div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-key">Tự khởi động sau mất điện</span>
+            <div class="toggle ton"><div class="tthumb"></div></div>
+          </div>
+        </div>
+
+        <div class="danger-zone">
+          <div class="dz-title">Vùng nguy hiểm</div>
+          <div class="dz-row">
+            <span class="dz-label">Khởi động lại hệ thống</span>
+            <button class="btn-ghost-danger">Reboot</button>
+          </div>
+          <div class="dz-row">
+            <span class="dz-label">Xóa toàn bộ log & lịch sử</span>
+            <button class="btn-ghost-danger">Xóa log</button>
+          </div>
+          <div class="dz-row">
+            <span class="dz-label">Đặt lại cài đặt gốc</span>
+            <button class="btn-ghost-danger">Factory reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

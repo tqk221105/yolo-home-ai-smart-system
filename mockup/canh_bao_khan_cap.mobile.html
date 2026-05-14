@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Yolo Home · Cảnh báo khẩn cấp</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+.phone-wrap{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:32px 16px;background:#f0f0f0}
+.phone{width:390px;min-height:844px;background:var(--color-background-primary);border-radius:44px;overflow:hidden;border:8px solid #1a1a1a;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative;display:flex;flex-direction:column}
+
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 6px;background:var(--color-background-primary)}
+.status-time{font-size:15px;font-weight:600;color:var(--color-text-primary)}
+.status-icons{display:flex;gap:6px;align-items:center}
+.status-icons svg{width:14px;height:14px;stroke:var(--color-text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.app-bar{display:flex;align-items:center;gap:12px;padding:10px 20px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.back-btn svg{width:16px;height:16px;stroke:var(--color-text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bar-title{font-size:16px;font-weight:500;color:var(--color-text-primary);flex:1}
+.notif-dot{width:10px;height:10px;border-radius:50%;background:var(--color-text-danger);animation:blink .9s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.content{flex:1;overflow-y:auto;padding:0 0 100px}
+
+.tab-bar{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;padding-top:10px}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding-top:4px;position:relative}
+.tab-item svg{width:22px;height:22px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab-item span{font-size:10px;color:var(--color-text-tertiary)}
+.tab-item.active svg{stroke:var(--color-text-danger)}
+.tab-item.active span{color:var(--color-text-danger)}
+.tab-badge{position:absolute;top:2px;right:calc(50% - 20px);width:16px;height:16px;border-radius:50%;background:var(--color-text-danger);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* ── Active alert banner ── */
+.alert-banner{background:var(--color-background-danger);padding:20px;display:flex;flex-direction:column;gap:12px}
+.alert-banner-top{display:flex;align-items:center;gap:12px}
+.alert-icon-lg{width:52px;height:52px;border-radius:14px;background:rgba(239,68,68,.2);border:1.5px solid var(--color-border-danger);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.alert-icon-lg svg{width:26px;height:26px;stroke:var(--color-text-danger);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.alert-title{font-size:18px;font-weight:700;color:var(--color-text-danger)}
+.alert-sub{font-size:13px;color:var(--color-text-danger);opacity:.8;margin-top:3px}
+.alert-time{font-size:11px;color:var(--color-text-danger);opacity:.7;margin-top:2px}
+
+/* ── Gas gauge ── */
+.gauge-wrap{background:rgba(239,68,68,.12);border:0.5px solid var(--color-border-danger);border-radius:14px;padding:14px 16px}
+.gauge-label-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.gauge-label{font-size:12px;color:var(--color-text-danger);font-weight:500}
+.gauge-value{font-size:22px;font-weight:700;color:var(--color-text-danger)}
+.gauge-unit{font-size:13px;font-weight:400}
+.gauge-bar-bg{height:8px;border-radius:4px;background:rgba(239,68,68,.2);overflow:hidden}
+.gauge-bar-fill{height:100%;border-radius:4px;background:var(--color-text-danger);width:82%}
+.gauge-zones{display:flex;justify-content:space-between;margin-top:5px}
+.gauge-zone{font-size:10px;color:var(--color-text-danger);opacity:.7}
+
+/* ── Alert action buttons ── */
+.alert-actions{display:flex;gap:10px;padding:0 20px;margin-top:16px}
+.btn-danger{flex:1;padding:14px;border-radius:14px;background:var(--color-text-danger);color:#fff;font-size:14px;font-weight:600;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-danger svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-dismiss{flex:1;padding:14px;border-radius:14px;background:var(--color-background-secondary);color:var(--color-text-secondary);font-size:14px;font-weight:500;border:0.5px solid var(--color-border-secondary);cursor:pointer}
+
+/* ── Sensor status ── */
+.sensor-section{padding:20px 20px 0}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.sensor-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.sensor-card{background:var(--color-background-secondary);border-radius:14px;padding:14px;border:0.5px solid var(--color-border-tertiary)}
+.sensor-card.alert{border-color:var(--color-border-danger);background:var(--color-background-danger)}
+.sensor-card.warn{border-color:var(--color-border-warning);background:var(--color-background-warning)}
+.sc-name{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.sc-name.alert{color:var(--color-text-danger)}
+.sc-name.warn{color:var(--color-text-warning)}
+.sc-val{font-size:22px;font-weight:700;color:var(--color-text-primary)}
+.sc-val.alert{color:var(--color-text-danger)}
+.sc-val.warn{color:var(--color-text-warning)}
+.sc-unit{font-size:12px;font-weight:400;color:var(--color-text-tertiary)}
+.sc-status{font-size:11px;margin-top:4px}
+
+/* ── PIR / stranger alert card ── */
+.stranger-card{background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+.stranger-icon{width:40px;height:40px;border-radius:10px;background:rgba(245,158,11,.2);border:1px solid var(--color-border-warning);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stranger-icon svg{width:18px;height:18px;stroke:var(--color-text-warning);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.stranger-title{font-size:14px;font-weight:600;color:var(--color-text-warning)}
+.stranger-sub{font-size:12px;color:var(--color-text-warning);opacity:.8;margin-top:3px}
+.stranger-time{font-size:11px;color:var(--color-text-warning);opacity:.7;margin-top:4px}
+.stranger-thumb{width:40px;height:40px;border-radius:8px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-warning);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:auto}
+.stranger-thumb svg{width:18px;height:18px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── Alert history ── */
+.log-wrap{background:var(--color-background-secondary);border-radius:14px;padding:14px;border:0.5px solid var(--color-border-tertiary);margin-bottom:20px}
+.log-row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.log-row:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.log-dot.danger{background:var(--color-text-danger)}
+.log-dot.warn{background:var(--color-text-warning)}
+.log-dot.ok{background:var(--color-text-success)}
+.log-time{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono);width:52px;flex-shrink:0}
+.log-desc{flex:1;font-size:12px;color:var(--color-text-primary)}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+</style>
+
+<div class="phone-wrap">
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time">14:10</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2" stroke-width="3"/></svg>
+    </div>
+  </div>
+
+  <!-- App bar -->
+  <div class="app-bar">
+    <div class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <span class="bar-title">Cảnh báo</span>
+    <div class="notif-dot"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- ── ACTIVE GAS ALERT (UC02) ── -->
+    <div class="alert-banner">
+      <div class="alert-banner-top">
+        <div class="alert-icon-lg">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="alert-title">Phát hiện khí nguy hiểm!</div>
+          <div class="alert-sub">MQ135 — Nồng độ vượt ngưỡng an toàn</div>
+          <div class="alert-time">14:10:03 · Buzzer đang kích hoạt · LED đỏ nhấp nháy</div>
+        </div>
+      </div>
+
+      <!-- Gas gauge -->
+      <div class="gauge-wrap">
+        <div class="gauge-label-row">
+          <span class="gauge-label">Nồng độ khí (MQ135)</span>
+          <span class="gauge-value">820 <span class="gauge-unit">ppm</span></span>
+        </div>
+        <div class="gauge-bar-bg">
+          <div class="gauge-bar-fill"></div>
+        </div>
+        <div class="gauge-zones">
+          <span class="gauge-zone">0</span>
+          <span class="gauge-zone">An toàn &lt;400</span>
+          <span class="gauge-zone">Ngưỡng 500</span>
+          <span class="gauge-zone">1000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="alert-actions">
+      <button class="btn-danger">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2H6.6a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.92v-.01z"/></svg>
+        Khẩn cấp
+      </button>
+      <button class="btn-dismiss">Đã xử lý</button>
+    </div>
+
+    <!-- Sensor overview -->
+    <div class="sensor-section">
+      <div class="section-label" style="margin-top:20px">Trạng thái cảm biến</div>
+      <div class="sensor-grid">
+        <div class="sensor-card alert">
+          <div class="sc-name alert">MQ135 Khí</div>
+          <div class="sc-val alert">820 <span class="sc-unit">ppm</span></div>
+          <div class="sc-status"><span class="badge bd"><span class="dot"></span>Nguy hiểm</span></div>
+        </div>
+        <div class="sensor-card">
+          <div class="sc-name">DHT20 Nhiệt</div>
+          <div class="sc-val">32 <span class="sc-unit">°C</span></div>
+          <div class="sc-status"><span class="badge bx">Bình thường</span></div>
+        </div>
+        <div class="sensor-card">
+          <div class="sc-name">DHT20 Ẩm</div>
+          <div class="sc-val">65 <span class="sc-unit">%</span></div>
+          <div class="sc-status"><span class="badge bx">Bình thường</span></div>
+        </div>
+        <div class="sensor-card warn">
+          <div class="sc-name warn">PIR Cửa</div>
+          <div class="sc-val warn" style="font-size:14px;padding-top:4px">Phát hiện</div>
+          <div class="sc-status"><span class="badge ba"><span class="dot"></span>Chuyển động</span></div>
+        </div>
+      </div>
+
+      <!-- ── STRANGER ALERT (UC08) ── -->
+      <div class="section-label">Cảnh báo người lạ (UC08)</div>
+      <div class="stranger-card">
+        <div class="stranger-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="13"/><line x1="23" y1="8" x2="18" y2="13"/></svg>
+        </div>
+        <div style="flex:1">
+          <div class="stranger-title">Phát hiện người lạ tại cửa</div>
+          <div class="stranger-sub">Nhận diện khuôn mặt thất bại · 34% — dưới ngưỡng 90%</div>
+          <div class="stranger-time">14:10:33 · Buzzer + LED đỏ kích hoạt</div>
+        </div>
+        <div class="stranger-thumb">
+          <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+      </div>
+
+      <!-- Alert history -->
+      <div class="section-label">Lịch sử cảnh báo hôm nay</div>
+      <div class="log-wrap">
+        <div class="log-row">
+          <div class="log-dot danger"></div>
+          <span class="log-time">14:10</span>
+          <span class="log-desc">Khí gas vượt ngưỡng — 820 ppm</span>
+          <span class="badge bd">Khẩn</span>
+        </div>
+        <div class="log-row">
+          <div class="log-dot warn"></div>
+          <span class="log-time">14:10</span>
+          <span class="log-desc">Người lạ tại cửa — nhận diện thất bại 34%</span>
+          <span class="badge ba">Cảnh báo</span>
+        </div>
+        <div class="log-row">
+          <div class="log-dot warn"></div>
+          <span class="log-time">13:40</span>
+          <span class="log-desc">Người lạ tại cửa — nhận diện thất bại 41%</span>
+          <span class="badge ba">Cảnh báo</span>
+        </div>
+        <div class="log-row">
+          <div class="log-dot ok"></div>
+          <span class="log-time">11:00</span>
+          <span class="log-desc">Khí gas trở về bình thường — 210 ppm</span>
+          <span class="badge bg">Tự động tắt</span>
+        </div>
+        <div class="log-row">
+          <div class="log-dot danger"></div>
+          <span class="log-time">10:55</span>
+          <span class="log-desc">Khí gas vượt ngưỡng — 640 ppm</span>
+          <span class="badge bd">Khẩn</span>
+        </div>
+        <div class="log-row">
+          <div class="log-dot ok"></div>
+          <span class="log-time">09:00</span>
+          <span class="log-desc">PIR báo động giả — không phát hiện khuôn mặt</span>
+          <span class="badge bx">Auto reset</span>
+        </div>
+      </div>
+
+    </div><!-- /sensor-section -->
+
+  </div><!-- /content -->
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-item" onclick="window.location.href='01 dashboard_tong_quan.html'">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Tổng quan</span>
+    </div>
+    <div class="tab-item" onclick="window.location.href='nhan_dien_khuon_mat.mobile.html'">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Khuôn mặt</span>
+    </div>
+    <div class="tab-item" onclick="window.location.href='dieu_khien_giong_noi.mobile.html'">
+      <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+      <span>Giọng nói</span>
+    </div>
+    <div class="tab-item active" onclick="window.location.href='canh_bao_khan_cap.mobile.html'">
+      <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      <span>Cảnh báo</span>
+      <div class="tab-badge">2</div>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+</div><!-- /phone-wrap -->
+
+</body>
+</html>

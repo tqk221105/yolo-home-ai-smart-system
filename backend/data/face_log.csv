@@ -1,0 +1,148 @@
+timestamp,event,label,confidence,action,message
+2026-05-14 09:38:31.088525,face_register,owner,,REGISTER,Saved sample 1778726311086.jpg
+2026-05-14 09:38:31.108658,face_retrain,owner,,TRAIN,Trained FaceAI with 1 sample(s)
+2026-05-14 09:38:38.241450,face_register,owner,,REGISTER,Saved sample 1778726318240.jpg
+2026-05-14 09:38:38.252403,face_retrain,owner,,TRAIN,Trained FaceAI with 2 sample(s)
+2026-05-14 09:38:46.752994,face_register,owner,,REGISTER,Saved sample 1778726326751.jpg
+2026-05-14 09:38:46.764732,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 09:38:53.005189,face_register,owner,,REGISTER,Saved sample 1778726333004.jpg
+2026-05-14 09:38:53.017319,face_retrain,owner,,TRAIN,Trained FaceAI with 4 sample(s)
+2026-05-14 09:39:34.169027,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 09:39:49.864304,face_door_open,owner,0.9676,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 09:40:04.896839,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 09:40:13.554452,face_door_open,owner,0.9779,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 09:40:20.425910,face_door_open,owner,0.9682,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 09:40:48.335964,face_door_open,owner,0.9525,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 09:41:04.602367,face_door_open,owner,0.9748,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 10:02:20.054437,face_door_open,owner,0.9361,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 10:47:53.546529,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.2113; max=0.1243"
+2026-05-14 10:48:06.908463,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.2113; max=0.1243"
+2026-05-14 10:48:34.682820,face_door_open,owner,0.9291,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 10:48:44.323800,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.2113; max=0.1243"
+2026-05-14 10:54:41.764123,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.2151; max=0.1243"
+2026-05-14 11:18:39.171496,face_door_open,owner,0.9373,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 11:20:00.941735,face_door_open,owner,0.9083,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 11:20:17.494259,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 11:20:31.764274,face_door_open,owner,0.9104,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 11:28:22.868959,face_door_open,owner,0.918,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 11:34:40.309474,face_door_open,owner,0.9401,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 11:48:05.390779,face_door_open,owner,0.9428,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 12:40:13.734288,face_delete,owner,,DELETE,Deleted 4 sample(s); removed empty model
+2026-05-14 12:40:37.209971,face_register,owner,,REGISTER,Saved sample 1778737237207.jpg
+2026-05-14 12:40:37.318097,face_retrain,owner,,TRAIN,Trained FaceAI with 1 sample(s)
+2026-05-14 12:40:44.700475,face_register,owner,,REGISTER,Saved sample 1778737244699.jpg
+2026-05-14 12:40:44.833406,face_retrain,owner,,TRAIN,Trained FaceAI with 2 sample(s)
+2026-05-14 12:41:38.268912,face_register,owner,,REGISTER,Saved sample 1778737298267.jpg
+2026-05-14 12:41:38.371234,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 12:42:11.310657,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 12:42:23.560545,face_low_confidence,owner,0.5391,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.1908; max=0.4140"
+2026-05-14 12:42:32.187374,face_low_confidence,owner,0.3199,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.2816; max=0.4140"
+2026-05-14 12:42:44.707702,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.4838; max=0.4140"
+2026-05-14 12:50:38.304308,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 12:50:45.567165,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.4320; max=0.4140"
+2026-05-14 12:51:00.050020,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 12:51:03.526150,face_low_confidence,owner,0.2634,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.3049; max=0.4140"
+2026-05-14 12:51:11.049477,face_low_confidence,owner,0.1665,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.3451; max=0.4140"
+2026-05-14 12:52:04.145883,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5112; max=0.4140"
+2026-05-14 12:54:06.978825,face_recognition_failed,,,DENY,Khuôn mặt quá nhỏ hoặc bị che khuất
+2026-05-14 12:54:15.609330,face_low_confidence,owner,0.4841,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6053; max=0.4140"
+2026-05-14 12:54:25.446143,face_low_confidence,owner,0.4228,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6335; max=0.4140"
+2026-05-14 12:54:29.014881,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 12:54:35.963737,face_low_confidence,owner,0.4576,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6175; max=0.4140"
+2026-05-14 12:54:49.816572,face_low_confidence,owner,0.6794,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5155; max=0.4140"
+2026-05-14 12:58:51.734977,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6472; max=0.4140"
+2026-05-14 12:59:06.125301,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6244; max=0.4140"
+2026-05-14 12:59:17.355269,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5156; max=0.4140"
+2026-05-14 12:59:21.293514,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 12:59:25.448927,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5156; max=0.4140"
+2026-05-14 13:03:35.917119,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:03:43.490286,face_recognition_failed,,,DENY,Khuôn mặt quá nhỏ hoặc bị che khuất
+2026-05-14 13:03:52.720219,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5157; max=0.4140"
+2026-05-14 13:08:30.520235,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:08:52.249983,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5326; max=0.3560"
+2026-05-14 13:09:26.163332,face_low_confidence,owner,0.0,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5326; max=0.3560"
+2026-05-14 13:11:06.571668,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:11:24.097231,face_door_open,owner,0.9091,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:13:23.593807,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:13:32.394640,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:13:45.452377,face_door_open,owner,0.9233,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:13:51.985372,face_door_open,owner,0.9233,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:14:16.005717,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:14:26.432368,face_door_open,owner,0.9188,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:14:34.184074,face_door_open,owner,0.9205,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:14:47.914970,face_door_open,owner,0.919,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:15:04.418254,face_door_open,owner,0.9173,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:15:30.721135,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:15:41.553138,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:15:50.335713,face_recognition_failed,,,DENY,Khuôn mặt quá nhỏ hoặc bị che khuất
+2026-05-14 13:15:58.569154,face_retrain,owner,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:16:07.818819,face_door_open,owner,0.9067,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:16:34.917279,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:16:51.543669,face_door_open,owner,0.9159,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:17:17.881332,face_door_open,owner,0.9122,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:17:34.866327,face_door_open,owner,0.9186,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:17:43.777012,face_door_open,owner,0.9118,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:18:36.663098,face_register,owner,,REGISTER,Saved sample 1778739516660.jpg
+2026-05-14 13:18:37.441556,face_retrain,owner,,TRAIN,Trained FaceAI with 4 sample(s)
+2026-05-14 13:18:55.262587,face_register,owner1,,REGISTER,Saved sample 1778739535260.jpg
+2026-05-14 13:18:55.525963,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 5 sample(s)
+2026-05-14 13:19:07.090259,face_register,owner1,,REGISTER,Saved sample 1778739547086.jpg
+2026-05-14 13:19:07.359815,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 6 sample(s)
+2026-05-14 13:19:16.993454,face_register,owner1,,REGISTER,Saved sample 1778739556992.jpg
+2026-05-14 13:19:17.346135,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 7 sample(s)
+2026-05-14 13:19:29.358599,face_retrain,owner1,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:19:29.359040,face_delete,owner,,DELETE,Deleted 4 sample(s) and retrained FaceAI
+2026-05-14 13:19:59.788741,face_door_open,owner1,0.9301,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:20:15.624997,face_door_open,owner1,0.9227,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:20:21.018486,face_door_open,owner1,0.9227,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:20:36.036494,face_door_open,owner1,0.9132,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:25:19.685513,face_retrain,owner1,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:25:36.852981,face_low_confidence,owner1,0.8729,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5422; max=0.5263; sample_distance=0.5226; sample_max=0.5000"
+2026-05-14 13:25:41.088892,face_low_confidence,owner1,0.8247,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5704; max=0.5263; sample_distance=0.5548; sample_max=0.5000"
+2026-05-14 13:25:57.063330,face_door_open,owner1,0.9342,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:28:18.851956,face_low_confidence,owner1,0.7515,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6132; max=0.5263; sample_distance=0.6135; sample_max=0.5000"
+2026-05-14 13:28:34.169069,face_register,owner,,REGISTER,Saved sample 1778740114163.jpg
+2026-05-14 13:28:34.795776,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 4 sample(s)
+2026-05-14 13:28:43.770921,face_register,owner,,REGISTER,Saved sample 1778740123766.jpg
+2026-05-14 13:28:44.636602,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 5 sample(s)
+2026-05-14 13:28:59.559707,face_register,owner,,REGISTER,Saved sample 1778740139555.jpg
+2026-05-14 13:29:00.288397,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 6 sample(s)
+2026-05-14 13:29:06.652569,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 6 sample(s)
+2026-05-14 13:29:16.299117,face_register,owner,,REGISTER,Saved sample 1778740156297.jpg
+2026-05-14 13:29:17.009923,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 7 sample(s)
+2026-05-14 13:29:29.626001,face_door_open,owner,0.9327,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:29:45.073436,face_door_open,owner,0.9111,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:30:07.504787,face_door_open,owner,0.9106,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:30:17.310738,face_door_open,owner,0.9172,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:30:45.052489,face_low_confidence,owner,0.5711,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6263; max=0.4587; sample_distance=0.6525; sample_max=0.5000"
+2026-05-14 13:30:55.059020,face_low_confidence,owner,0.5711,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6263; max=0.4587; sample_distance=0.6525; sample_max=0.5000"
+2026-05-14 13:31:47.089474,face_low_confidence,owner,0.7265,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5471; max=0.4587; sample_distance=0.5845; sample_max=0.5000"
+2026-05-14 13:32:05.729230,face_low_confidence,owner,0.7562,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5320; max=0.4587; sample_distance=0.5766; sample_max=0.5000"
+2026-05-14 13:32:32.022249,face_low_confidence,owner1,0.9098,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.4747; max=0.5263; sample_distance=0.5307; sample_max=0.5000"
+2026-05-14 13:32:52.143408,face_recognition_failed,,,DENY,Không phát hiện khuôn mặt trong ảnh
+2026-05-14 13:33:02.185054,face_low_confidence,owner,0.8455,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.4865; max=0.4587; sample_distance=0.5192; sample_max=0.5000"
+2026-05-14 13:33:13.372850,face_low_confidence,owner,0.8472,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.4856; max=0.4587; sample_distance=0.5157; sample_max=0.5000"
+2026-05-14 13:33:28.738133,face_door_open,owner,0.9006,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:33:58.486055,face_door_open,owner,0.9036,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:34:12.008478,face_door_open,owner1,0.9161,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:34:25.628460,face_door_open,owner1,0.9229,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:35:01.687077,face_door_open,owner1,0.9226,UNLOCK,Nhận diện owner1 thành công; opened lock-status
+2026-05-14 13:35:18.962195,face_low_confidence,owner,0.6438,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5892; max=0.4587; sample_distance=0.6298; sample_max=0.5000"
+2026-05-14 13:36:09.208703,face_retrain,owner1,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:36:09.209122,face_delete,owner,,DELETE,Deleted 4 sample(s) and retrained FaceAI
+2026-05-14 13:36:19.381413,face_low_confidence,owner1,0.6878,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6504; max=0.5263; sample_distance=0.6736; sample_max=0.5000"
+2026-05-14 13:36:31.163030,face_low_confidence,owner1,0.8422,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5601; max=0.5263; sample_distance=0.5549; sample_max=0.5000"
+2026-05-14 13:36:46.200066,face_low_confidence,owner1,0.7362,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6221; max=0.5263; sample_distance=0.6268; sample_max=0.5000"
+2026-05-14 13:44:07.120082,face_low_confidence,owner1,0.7747,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5996; max=0.5263; sample_distance=0.6237; sample_max=0.5000"
+2026-05-14 13:44:21.088803,face_register,owner,,REGISTER,Saved sample 1778741061083.jpg
+2026-05-14 13:44:21.463434,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 4 sample(s)
+2026-05-14 13:44:26.695070,face_register,owner,,REGISTER,Saved sample 1778741066693.jpg
+2026-05-14 13:44:27.075656,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 5 sample(s)
+2026-05-14 13:44:34.602731,face_register,owner,,REGISTER,Saved sample 1778741074599.jpg
+2026-05-14 13:44:35.015764,face_retrain,"owner,owner1",,TRAIN,Trained FaceAI with 6 sample(s)
+2026-05-14 13:44:46.161932,face_door_open,owner,0.9103,UNLOCK,Nhận diện owner thành công; opened lock-status
+2026-05-14 13:45:58.120862,face_retrain,owner1,,TRAIN,Trained FaceAI with 3 sample(s)
+2026-05-14 13:45:58.121642,face_delete,owner,,DELETE,Deleted 3 sample(s) and retrained FaceAI
+2026-05-14 13:46:06.140249,face_low_confidence,owner1,0.6465,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.6745; max=0.5263; sample_distance=0.7003; sample_max=0.5000"
+2026-05-14 13:46:15.005637,face_low_confidence,owner1,0.8422,DENY,"Độ tin cậy thấp, không mở cửa; distance=0.5601; max=0.5263; sample_distance=0.5549; sample_max=0.5000"
+2026-05-14 13:59:20.498339,face_delete,owner1,,DELETE,Deleted 3 sample(s); removed empty model

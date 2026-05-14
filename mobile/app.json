@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "YoloHome",
+    "slug": "yolohome",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "scheme": "yolohome",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yolohome.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.yolohome.mobile"
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        { "cameraPermission": "Cho phép YoloHome dùng camera để nhận diện khuôn mặt." }
+      ],
+      [
+        "expo-av",
+        { "microphonePermission": "Cho phép YoloHome dùng micro để nhận lệnh giọng nói." }
+      ]
+    ]
+  }
+}

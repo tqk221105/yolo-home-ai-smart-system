@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Yolo Home · Nhận diện khuôn mặt</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ── Phone frame wrapper ── */
+.phone-wrap{display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:32px 16px;background:#f0f0f0}
+.phone{width:390px;min-height:844px;background:var(--color-background-primary);border-radius:44px;overflow:hidden;border:8px solid #1a1a1a;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative;display:flex;flex-direction:column}
+
+/* ── Status bar ── */
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px 6px;background:var(--color-background-primary)}
+.status-time{font-size:15px;font-weight:600;color:var(--color-text-primary)}
+.status-icons{display:flex;gap:6px;align-items:center}
+.status-icons svg{width:14px;height:14px;stroke:var(--color-text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── App bar ── */
+.app-bar{display:flex;align-items:center;gap:12px;padding:10px 20px 12px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.back-btn svg{width:16px;height:16px;stroke:var(--color-text-primary);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bar-title{font-size:16px;font-weight:500;color:var(--color-text-primary);flex:1}
+.bar-badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px;background:var(--color-background-success);color:var(--color-text-success)}
+
+/* ── Scroll content ── */
+.content{flex:1;overflow-y:auto;padding:20px 20px 100px}
+
+/* ── Tab bar ── */
+.tab-bar{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;padding-top:10px;padding-bottom:0}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding-top:4px}
+.tab-item svg{width:22px;height:22px;stroke:var(--color-text-tertiary);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab-item span{font-size:10px;color:var(--color-text-tertiary)}
+.tab-item.active svg{stroke:var(--color-text-info)}
+.tab-item.active span{color:var(--color-text-info)}
+
+/* ── Components ── */
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;margin-top:20px}
+.section-label:first-child{margin-top:0}
+.card{background:var(--color-background-secondary);border-radius:16px;padding:16px;border:0.5px solid var(--color-border-tertiary);margin-bottom:14px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:99px}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bd{background:var(--color-background-danger);color:var(--color-text-danger)}
+.bx{background:var(--color-background-tertiary);color:var(--color-text-secondary)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.stat-row:last-child{border-bottom:none}
+.stat-key{font-size:13px;color:var(--color-text-secondary)}
+.stat-val{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:10px 0}
+
+/* ── Camera viewfinder ── */
+.viewfinder-wrap{position:relative;border-radius:20px;overflow:hidden;background:#000;aspect-ratio:3/4;margin-bottom:14px}
+.viewfinder-bg{width:100%;height:100%;background:linear-gradient(160deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);display:flex;align-items:center;justify-content:center}
+.face-oval{width:180px;height:220px;border:2px solid rgba(100,200,255,0.8);border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);box-shadow:0 0 0 9999px rgba(0,0,0,.35)}
+.corner{position:absolute;width:24px;height:24px}
+.corner-tl{top:calc(50% - 130px);left:calc(50% - 100px);border-top:3px solid #64c8ff;border-left:3px solid #64c8ff;border-radius:4px 0 0 0}
+.corner-tr{top:calc(50% - 130px);right:calc(50% - 100px);border-top:3px solid #64c8ff;border-right:3px solid #64c8ff;border-radius:0 4px 0 0}
+.corner-bl{bottom:calc(50% - 100px);left:calc(50% - 100px);border-bottom:3px solid #64c8ff;border-left:3px solid #64c8ff;border-radius:0 0 0 4px}
+.corner-br{bottom:calc(50% - 100px);right:calc(50% - 100px);border-bottom:3px solid #64c8ff;border-right:3px solid #64c8ff;border-radius:0 0 4px 0}
+.vf-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:13px;color:rgba(255,255,255,.85);font-weight:500}
+.vf-top{position:absolute;top:14px;left:0;right:0;display:flex;justify-content:center}
+
+/* ── Step indicator ── */
+.steps{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+.step{flex:1;height:4px;border-radius:2px;background:var(--color-border-tertiary)}
+.step.done{background:var(--color-text-success)}
+.step.active{background:var(--color-text-info)}
+.step-labels{display:flex;justify-content:space-between;margin-top:6px;margin-bottom:14px}
+.step-lbl{font-size:10px;color:var(--color-text-tertiary)}
+.step-lbl.active{color:var(--color-text-info);font-weight:500}
+
+/* ── Instruction chips ── */
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.chip{font-size:12px;padding:4px 10px;border-radius:99px;border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:var(--color-background-secondary)}
+.chip.done{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.chip.active{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info);font-weight:500}
+
+/* ── Action button ── */
+.btn-primary{width:100%;padding:16px;border-radius:14px;background:var(--color-text-info);color:#fff;font-size:15px;font-weight:600;border:none;cursor:pointer;letter-spacing:0.01em}
+.btn-ghost{width:100%;padding:13px;border-radius:14px;background:transparent;color:var(--color-text-secondary);font-size:14px;font-weight:500;border:0.5px solid var(--color-border-secondary);cursor:pointer;margin-top:8px}
+
+/* ── Face list ── */
+.face-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.face-row{display:flex;align-items:center;gap:12px;background:var(--color-background-secondary);border-radius:14px;padding:12px 14px;border:0.5px solid var(--color-border-tertiary)}
+.face-row.primary{border-color:var(--color-border-info);background:var(--color-background-info)}
+.face-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;flex-shrink:0}
+.av-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.av-green{background:var(--color-background-success);color:var(--color-text-success)}
+.av-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+.face-info{flex:1;min-width:0}
+.face-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.face-meta{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.face-acc{font-size:12px;font-weight:500}
+.acc-hi{color:var(--color-text-success)}
+.acc-mid{color:var(--color-text-warning)}
+.icon-btn{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary)}
+.icon-btn svg{width:14px;height:14px;stroke:var(--color-text-secondary);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn.danger{border-color:var(--color-border-danger)}
+.icon-btn.danger svg{stroke:var(--color-text-danger)}
+
+/* ── Add face button ── */
+.add-face-btn{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;border:1.5px dashed var(--color-border-info);background:var(--color-background-info);cursor:pointer;margin-bottom:14px}
+.add-face-icon{width:44px;height:44px;border-radius:50%;background:var(--color-background-info);border:1.5px solid var(--color-border-info);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.add-face-icon svg{width:18px;height:18px;stroke:var(--color-text-info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.add-face-text{font-size:13px;font-weight:500;color:var(--color-text-info)}
+.add-face-sub{font-size:11px;color:var(--color-text-info);opacity:.75;margin-top:2px}
+
+/* ── Log table ── */
+.log-wrap{background:var(--color-background-secondary);border-radius:14px;padding:14px;border:0.5px solid var(--color-border-tertiary)}
+.log-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.log-row:last-child{border-bottom:none}
+.log-time{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono);width:56px;flex-shrink:0}
+.log-name{flex:1;font-size:12px;color:var(--color-text-primary)}
+.log-name.stranger{color:var(--color-text-danger)}
+.log-name.miss{color:var(--color-text-secondary)}
+</style>
+
+<div class="phone-wrap">
+<div class="phone">
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time">14:30</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2"/><path d="M22 11v2" stroke-width="3"/></svg>
+    </div>
+  </div>
+
+  <!-- App bar -->
+  <div class="app-bar">
+    <div class="back-btn">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <span class="bar-title">Khuôn mặt</span>
+    <span class="bar-badge"><span class="dot"></span>Camera OK</span>
+  </div>
+
+  <!-- Scrollable content -->
+  <div class="content">
+
+    <!-- Registered faces -->
+    <div class="section-label">Khuôn mặt đã đăng ký (3)</div>
+    <div class="face-list">
+      <div class="face-row primary">
+        <div class="face-avatar av-blue">TN</div>
+        <div class="face-info">
+          <div class="face-name">Thiên Nguyễn <span style="font-size:10px;padding:2px 6px;border-radius:99px;background:var(--color-background-info);color:var(--color-text-info);font-weight:500;margin-left:4px">Chủ nhà</span></div>
+          <div class="face-meta">5 mẫu · Đăng ký 01/04/2026</div>
+        </div>
+        <div class="face-acc acc-hi">96%</div>
+        <div class="icon-btn danger">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </div>
+      </div>
+
+      <div class="face-row">
+        <div class="face-avatar av-green">AN</div>
+        <div class="face-info">
+          <div class="face-name">An Nguyễn</div>
+          <div class="face-meta">3 mẫu · Đăng ký 03/04/2026</div>
+        </div>
+        <div class="face-acc acc-hi">91%</div>
+        <div class="icon-btn danger">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </div>
+      </div>
+
+      <div class="face-row">
+        <div class="face-avatar av-amber">BT</div>
+        <div class="face-info">
+          <div class="face-name">Bảo Trân</div>
+          <div class="face-meta">2 mẫu · Cần thêm mẫu (≥3)</div>
+        </div>
+        <div class="face-acc acc-mid">87%</div>
+        <div class="icon-btn danger">
+          <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add new face -->
+    <div class="add-face-btn">
+      <div class="add-face-icon">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <div>
+        <div class="add-face-text">Đăng ký khuôn mặt mới</div>
+        <div class="add-face-sub">Dùng camera điện thoại — thu 5 mẫu</div>
+      </div>
+    </div>
+
+    <!-- Camera enrollment flow -->
+    <div class="section-label">Quy trình đăng ký — Bảo Trân (thêm mẫu)</div>
+
+    <!-- Step bar -->
+    <div class="steps">
+      <div class="step done"></div>
+      <div class="step done"></div>
+      <div class="step done"></div>
+      <div class="step active"></div>
+      <div class="step"></div>
+    </div>
+    <div class="step-labels">
+      <span class="step-lbl">Nhìn thẳng</span>
+      <span class="step-lbl">Trái</span>
+      <span class="step-lbl">Phải</span>
+      <span class="step-lbl active">Ngẩng</span>
+      <span class="step-lbl">Cúi</span>
+    </div>
+
+    <!-- Chip hints -->
+    <div class="chip-row">
+      <span class="chip done">✓ nhìn thẳng</span>
+      <span class="chip done">✓ quay trái</span>
+      <span class="chip done">✓ quay phải</span>
+      <span class="chip active">▶ ngẩng lên</span>
+      <span class="chip">cúi xuống</span>
+    </div>
+
+    <!-- Viewfinder -->
+    <div class="viewfinder-wrap">
+      <div class="viewfinder-bg">
+        <!-- simulated face silhouette -->
+        <svg viewBox="0 0 80 100" style="width:80px;height:100px;fill:rgba(255,255,255,.08)">
+          <ellipse cx="40" cy="38" rx="28" ry="34"/>
+          <ellipse cx="40" cy="90" rx="38" ry="28"/>
+        </svg>
+      </div>
+      <div class="face-oval"></div>
+      <div class="corner corner-tl"></div>
+      <div class="corner corner-tr"></div>
+      <div class="corner corner-bl"></div>
+      <div class="corner corner-br"></div>
+      <div class="vf-top">
+        <span class="badge bb"><span class="dot"></span>Đang nhận diện</span>
+      </div>
+      <div class="vf-hint">Ngẩng đầu nhẹ lên · giữ yên 2 giây</div>
+    </div>
+
+    <!-- Progress -->
+    <div class="card">
+      <div class="stat-row">
+        <span class="stat-key">Tiến độ thu mẫu</span>
+        <span class="stat-val" style="color:var(--color-text-info)">3 / 5 mẫu</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">Ngưỡng chấp nhận</span>
+        <span class="stat-val">≥ 90% độ tin cậy</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">Ánh sáng môi trường</span>
+        <span class="badge bg"><span class="dot"></span>Đủ sáng</span>
+      </div>
+    </div>
+
+    <button class="btn-primary">Chụp mẫu (4/5)</button>
+    <button class="btn-ghost">Hủy đăng ký</button>
+
+    <!-- Log -->
+    <div class="section-label" style="margin-top:24px">Nhật ký nhận diện hôm nay</div>
+    <div class="log-wrap">
+      <div class="log-row">
+        <span class="log-time">14:28</span>
+        <span class="log-name">Thiên Nguyễn</span>
+        <span class="badge bg">Mở cửa</span>
+        <span style="font-size:11px;color:var(--color-text-success);margin-left:4px">96%</span>
+      </div>
+      <div class="log-row">
+        <span class="log-time">14:10</span>
+        <span class="log-name stranger">Người lạ</span>
+        <span class="badge bd">Từ chối</span>
+        <span style="font-size:11px;color:var(--color-text-danger);margin-left:4px">34%</span>
+      </div>
+      <div class="log-row">
+        <span class="log-time">13:55</span>
+        <span class="log-name">An Nguyễn</span>
+        <span class="badge bg">Mở cửa</span>
+        <span style="font-size:11px;color:var(--color-text-success);margin-left:4px">93%</span>
+      </div>
+      <div class="log-row">
+        <span class="log-time">13:40</span>
+        <span class="log-name stranger">Người lạ</span>
+        <span class="badge bd">Từ chối</span>
+        <span style="font-size:11px;color:var(--color-text-danger);margin-left:4px">41%</span>
+      </div>
+      <div class="log-row">
+        <span class="log-time">13:22</span>
+        <span class="log-name miss">Không phát hiện</span>
+        <span class="badge bx">Bỏ qua</span>
+        <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:4px">PIR giả</span>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-item" onclick="window.location.href='01 dashboard_tong_quan.html'">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Tổng quan</span>
+    </div>
+    <div class="tab-item active" onclick="window.location.href='nhan_dien_khuon_mat.mobile.html'">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Khuôn mặt</span>
+    </div>
+    <div class="tab-item" onclick="window.location.href='dieu_khien_giong_noi.mobile.html'">
+      <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+      <span>Giọng nói</span>
+    </div>
+    <div class="tab-item" onclick="window.location.href='canh_bao_khan_cap.mobile.html'">
+      <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      <span>Cảnh báo</span>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+</div><!-- /phone-wrap -->
+
+</body>
+</html>
