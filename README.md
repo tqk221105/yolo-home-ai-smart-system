@@ -25,27 +25,117 @@ Yolo:Home là hệ thống nhà thông minh thử nghiệm, gồm backend Flask,
 ## Cấu trúc thư mục
 
 ```text
-.
+Yolo-home-ai-smart-system/
+|-- README.md
+|-- .gitignore
+|-- index.html                         # Trang chọn mockup PC/mobile
 |-- backend/
-|   |-- app.py                 # Flask entrypoint
-|   |-- routes/                # API routes: feeds, ai, security
-|   |-- ai/                    # FaceAI, voice mock, auto-control ML, logging
-|   |-- utils/adafruit.py      # Adafruit IO client
-|   |-- data/                  # Dataset, log CSV, dữ liệu runtime
-|   |-- models/                # Model .pkl cho fan/light/face
-|   |-- train.py               # Train model fan/light từ dataset gốc
-|   |-- retrain.py             # Retrain từ user_log.csv
-|   `-- tests/                 # Unit test FaceAI
+|   |-- app.py                         # Flask entrypoint
+|   |-- requirements.txt
+|   |-- train.py                       # Train model quạt/đèn từ dataset
+|   |-- retrain.py                     # Retrain model từ user_log.csv
+|   |-- face_train.py
+|   |-- face_retrain.py
+|   |-- ai/
+|   |   |-- auto_control.py            # ML đề xuất bật/tắt quạt, đèn
+|   |   |-- face_ai.py                 # Đăng ký, train, nhận diện khuôn mặt
+|   |   |-- face_logger.py
+|   |   |-- recognition.py             # Voice recognition mock
+|   |   `-- user_logger.py
+|   |-- routes/
+|   |   |-- feeds.py                   # API Adafruit feed
+|   |   |-- ai.py                      # API FaceAI, voice, auto-control
+|   |   `-- security.py                # API PIN, face log, voice log
+|   |-- utils/
+|   |   `-- adafruit.py                # Adafruit IO REST client
+|   |-- data/
+|   |   |-- ashrae.csv                 # Dataset train quạt
+|   |   |-- light_dataset.csv          # Dataset train đèn
+|   |   |-- user_log.csv               # Log thao tác để retrain
+|   |   |-- face_log.csv               # Log nhận diện khuôn mặt
+|   |   `-- action_count.txt
+|   |-- models/
+|   |   |-- fan_model.pkl
+|   |   |-- features.pkl
+|   |   |-- light_model.pkl
+|   |   `-- light_features.pkl
+|   |-- scripts/
+|   |   `-- test-aio-post.ps1
+|   `-- tests/
+|       `-- test_face_ai.py
 |-- frontend/
-|   |-- src/pages/             # Dashboard, control, PIN, Face, Voice, History...
-|   |-- src/services/api.js    # Axios client
-|   `-- vite.config.js         # Dev proxy tới backend
+|   |-- package.json
+|   |-- vite.config.js
+|   |-- eslint.config.js
+|   |-- index.html
+|   |-- public/
+|   |   |-- favicon.svg
+|   |   `-- icons.svg
+|   `-- src/
+|       |-- main.jsx
+|       |-- App.jsx
+|       |-- App.css
+|       |-- index.css
+|       |-- services/
+|       |   `-- api.js
+|       |-- assets/
+|       |   |-- hero.png
+|       |   |-- react.svg
+|       |   `-- vite.svg
+|       `-- pages/
+|           |-- Dashboard.jsx
+|           |-- ControlPanel.jsx
+|           |-- AIPanel.jsx
+|           |-- ThresholdPanel.jsx
+|           |-- PinPanel.jsx
+|           |-- FacePanel.jsx
+|           |-- VoicePanel.jsx
+|           |-- AlertPanel.jsx
+|           `-- HistoryPanel.jsx
 |-- mobile/
-|   |-- app/                   # Expo Router screens
-|   |-- services/api.ts        # Mobile API client, cần sửa BASE_URL theo IP LAN
-|   `-- constants/mockData.ts  # Dữ liệu demo cho một số màn hình
-|-- mockup/                    # HTML/CSS/JS mockup tĩnh
-`-- index.html                 # Trang chọn mockup PC/mobile
+|   |-- package.json
+|   |-- app.json
+|   |-- index.js
+|   |-- tsconfig.json
+|   |-- App.js
+|   |-- Project CYolohome0205docexpo-qr.png
+|   |-- app/
+|   |   |-- _layout.tsx
+|   |   |-- pin.tsx
+|   |   `-- (tabs)/
+|   |       |-- _layout.tsx
+|   |       |-- index.tsx                # Tổng quan
+|   |       |-- face.tsx                 # FaceAI
+|   |       |-- voice.tsx                # Giọng nói/mock
+|   |       `-- alerts.tsx               # Cảnh báo/mock
+|   |-- services/
+|   |   `-- api.ts                      # Sửa BASE_URL theo IP LAN
+|   |-- constants/
+|   |   |-- Colors.ts
+|   |   `-- mockData.ts
+|   `-- assets/
+|       |-- icon.png
+|       |-- adaptive-icon.png
+|       |-- splash-icon.png
+|       `-- favicon.png
+`-- mockup/
+    |-- style.css
+    |-- script.js
+    |-- update_mockups.py
+    |-- update_mobile_links.py
+    |-- 01 dashboard_tong_quan.html
+    |-- 02 cua_bao_mat.html
+    |-- 03 dieu_khien_thu_cong.html
+    |-- 04 cai_dat_nguong_tu_dong.html
+    |-- 05 canh_bao_thong_bao.html
+    |-- 06 quan_ly_mat_ma.html
+    |-- 07 quan_ly_khuon_mat.html
+    |-- 08 cai_dat_giong_noi.html
+    |-- 9 lich_su_thong_ke.html
+    |-- 10 cai_dat_he_thong.html
+    |-- nhan_dien_khuon_mat.mobile.html
+    |-- dieu_khien_giong_noi.mobile.html
+    `-- canh_bao_khan_cap.mobile.html
 ```
 
 ## Yêu cầu môi trường
