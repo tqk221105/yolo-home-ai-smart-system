@@ -1,235 +1,244 @@
-# 🏠 Yolo:Home – Hệ thống nhà thông minh tích hợp AI và IoT
+# Yolo:Home AI Smart System
 
-![Platform](https://img.shields.io/badge/Platform-ESP32%20%2F%20Yolo%3ABit-blue)
-![Protocol](https://img.shields.io/badge/Protocol-MQTT-orange)
-![AI](https://img.shields.io/badge/AI-Google%20Teachable%20Machine-brightgreen)
-![Language](https://img.shields.io/badge/Language-MicroPython%20%7C%20Python-yellow)
-![Mobile](https://img.shields.io/badge/Mobile-React%20Native%20Expo-9cf)
+Yolo:Home là hệ thống nhà thông minh thử nghiệm, gồm backend Flask, dashboard web React/Vite và ứng dụng mobile Expo. Project tập trung vào điều khiển thiết bị qua Adafruit IO, giám sát cảm biến, bảo mật bằng PIN, nhận diện khuôn mặt FaceAI và tự động hóa quạt/đèn bằng model ML đơn giản.
 
----
+## Tính năng chính
 
-## 1. Giới thiệu tổng quan
+- Dashboard web để xem cảm biến, trạng thái thiết bị, lịch sử và thao tác điều khiển.
+- Kết nối Adafruit IO để đọc/ghi feed thiết bị như nhiệt độ, độ ẩm, đèn, quạt, khóa cửa, relay và trạng thái PIN.
+- API bảo mật PIN với khóa tạm thời sau nhiều lần nhập sai.
+- FaceAI: đăng ký khuôn mặt, huấn luyện lại model, nhận diện khuôn mặt và gửi lệnh mở khóa cửa.
+- Auto control: dùng DecisionTree model để đề xuất bật/tắt quạt và đèn theo dữ liệu cảm biến.
+- Mobile app Expo có các tab tổng quan, khuôn mặt, giọng nói và cảnh báo. Một số màn hình mobile vẫn dùng mock data.
+- Bộ HTML mockup tĩnh trong `mockup/` để tham khảo giao diện.
 
-**Yolo:Home** là một dự án **AIoT (AI + IoT)** toàn diện, kết hợp sức mạnh của trí tuệ nhân tạo và khả năng kết nối vạn vật để tạo ra một không gian sống thông minh, tự hành. Dự án không chỉ dừng lại ở việc tự động hóa các thiết bị mà còn tập trung vào việc nhận diện hành vi và danh tính người dùng thông qua giọng nói và hình ảnh.
+## Tech stack
 
----
+| Phần | Công nghệ |
+| --- | --- |
+| Backend | Python, Flask, Flask-CORS, python-dotenv, requests |
+| AI/ML | scikit-learn, pandas, numpy, joblib, Pillow, OpenCV headless |
+| Web frontend | React 19, Vite, React Router, Axios, Recharts |
+| Mobile | Expo SDK 54, React Native 0.81, expo-router, TypeScript |
+| IoT cloud | Adafruit IO REST API |
 
-## 2. Các tính năng cốt lõi (User Requirements)
+## Cấu trúc thư mục
 
-| # | Tính năng | Mô tả |
-|---|-----------|-------|
-| 🌡️ | **Giám sát môi trường** | Tự động đo lường nhiệt độ, độ ẩm không khí (cảm biến DHT20) và cường độ ánh sáng theo thời gian thực. |
-| 🔐 | **Cửa mật mã bảo mật** | Hệ thống khóa cửa sử dụng mật mã nhập từ Remote hồng ngoại, hỗ trợ thay đổi mật mã và quản lý trạng thái máy (biến `STATUS`). |
-| 🤖 | **Nhận diện khuôn mặt (FaceAI)** | Sử dụng mô hình Machine Learning để nhận dạng chủ nhà và tự động kích hoạt lệnh mở cửa. |
-| 🎙️ | **Trợ lý ảo giọng nói** | Điều khiển thiết bị rảnh tay bằng các khẩu lệnh tiếng Việt thông qua bộ lọc từ khóa thông minh. |
-| 🔔 | **Cảnh báo & Tự động hóa** | Tự động bật đèn khi phát hiện chuyển động (cảm biến PIR) và gửi thông báo khẩn cấp. |
-
----
-
-## 3. Tech Stack
-
-### 🔧 Phần cứng (Hardware)
-- **Bộ xử lý trung tâm:** Mạch lập trình Yolo:Bit (Nền tảng chip ESP32).
-- **Thiết bị ngoại vi:** Cảm biến DHT20, PIR, ánh sáng, màn hình LCD 1602 (I2C), động cơ RC Servo, quạt mini, LED RGB.
-
-### 💻 Phần mềm & Hệ thống
-- **Frontend Web:** React 19 + Vite + Recharts
-- **Mobile App:** React Native + Expo SDK 54 + expo-router
-- **Backend:** Python Flask + Flask-CORS + python-dotenv
-- **Cloud/IoT:** Adafruit IO (MQTT / REST API)
-- **AI:** Google Teachable Machine (khuôn mặt & giọng nói)
-
----
-
-## 4. Cấu trúc thư mục
-
-```
-Yolo-home/
-├── backend/
-│   ├── .env                 # ← tạo từ .env.example (không commit)
-│   ├── .env.example
-│   ├── app.py
-│   ├── requirements.txt
-│   ├── routes/
-│   └── utils/
-├── frontend/
-│   ├── .env                 # ← tạo từ .env.example (không commit)
-│   ├── .env.example
-│   ├── src/
-│   └── package.json
-├── mobile/                  # React Native Expo — mobile app
-│   ├── app/
-│   │   ├── _layout.tsx
-│   │   └── (tabs)/
-│   │       ├── index.tsx    # Dashboard
-│   │       ├── face.tsx     # Nhận diện khuôn mặt
-│   │       ├── voice.tsx    # Điều khiển giọng nói
-│   │       └── alerts.tsx   # Cảnh báo khẩn cấp
-│   ├── services/
-│   │   └── api.ts           # ← đổi BASE_URL thành IP của máy
-│   ├── constants/Colors.ts
-│   └── package.json
-└── mockup/                  # HTML mockup tham khảo thiết kế
+```text
+.
+|-- backend/
+|   |-- app.py                 # Flask entrypoint
+|   |-- routes/                # API routes: feeds, ai, security
+|   |-- ai/                    # FaceAI, voice mock, auto-control ML, logging
+|   |-- utils/adafruit.py      # Adafruit IO client
+|   |-- data/                  # Dataset, log CSV, dữ liệu runtime
+|   |-- models/                # Model .pkl cho fan/light/face
+|   |-- train.py               # Train model fan/light từ dataset gốc
+|   |-- retrain.py             # Retrain từ user_log.csv
+|   `-- tests/                 # Unit test FaceAI
+|-- frontend/
+|   |-- src/pages/             # Dashboard, control, PIN, Face, Voice, History...
+|   |-- src/services/api.js    # Axios client
+|   `-- vite.config.js         # Dev proxy tới backend
+|-- mobile/
+|   |-- app/                   # Expo Router screens
+|   |-- services/api.ts        # Mobile API client, cần sửa BASE_URL theo IP LAN
+|   `-- constants/mockData.ts  # Dữ liệu demo cho một số màn hình
+|-- mockup/                    # HTML/CSS/JS mockup tĩnh
+`-- index.html                 # Trang chọn mockup PC/mobile
 ```
 
----
+## Yêu cầu môi trường
 
-## 5. Hướng dẫn cài đặt & chạy
+- Python 3.10 trở lên
+- Node.js 18 trở lên
+- npm
+- Expo Go nếu chạy mobile trên điện thoại
+- Tài khoản Adafruit IO nếu muốn đọc/ghi thiết bị thật
 
-### Yêu cầu
-- Python 3.10+
-- Node.js 18+
+## Cấu hình backend
 
----
+Tạo file `backend/.env` thủ công:
 
-### Backend (Flask)
+```env
+ADAFRUIT_USERNAME=your_adafruit_username
+ADAFRUIT_API_KEY=your_adafruit_api_key
+ADAFRUIT_DASHBOARD_KEY=your_dashboard_key
 
-```bash
+FLASK_HOST=0.0.0.0
+FLASK_PORT=5000
+
+FACE_ADMIN_PIN=2468
+FACE_CONFIDENCE_THRESHOLD=0.90
+FACE_MIN_SAMPLES_PER_LABEL=3
+FACE_REQUIRE_DETECTED_FACE=1
+
+ADAFRUIT_DOOR_FEED=lock-status
+ADAFRUIT_DOOR_OPEN_VALUE=UNLOCKED
+```
+
+Các biến quan trọng khác:
+
+- `FACE_ADMIN_PIN_SHA256`: dùng thay `FACE_ADMIN_PIN` nếu muốn lưu PIN dạng hash SHA-256.
+- `FACE_DATA_DIR`: thư mục lưu mẫu khuôn mặt, mặc định là `backend/data/faces`.
+- `FACE_MODEL_PATH`: đường dẫn model FaceAI, mặc định là `backend/models/face_model.pkl`.
+- `FACE_MAX_IMAGE_BYTES`: dung lượng ảnh tối đa, mặc định `5242880`.
+- `LIGHT_DATA_PATH`: CSV train đèn, mặc định `backend/data/light_dataset.csv`.
+- `LIGHT_USE_TIME_FEATURE`: bật/tắt feature giờ trong ngày cho model đèn, mặc định bật.
+- `LIGHT_NEED_ON_MAX_LUX`: ngưỡng lux để tạo nhãn cần bật đèn, mặc định `380`.
+- `LIGHT_INVERT_OUTPUT`: đảo kết quả model đèn khi inference nếu cần khớp phần cứng.
+
+Các feed Adafruit IO backend đang dùng:
+
+```text
+temperature, gauge, light, signal, fan-speed, light-control,
+remote, logs, led-switch, relay-switch, lock-status, pin-fail-count
+```
+
+## Chạy backend
+
+```powershell
 cd backend
-
-# 1. Tạo và kích hoạt virtual environment
 python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-
-# 2. Cài dependencies
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-
-# 3. Tạo file .env
-copy .env.example .env       # Windows
-# cp .env.example .env       # macOS/Linux
-
-# 4. Điền thông tin Adafruit vào .env (xem mục 6)
-
-# 5. Chạy server
 python app.py
-# → http://localhost:5000
 ```
 
----
+Backend mặc định chạy tại:
 
-### Frontend (React/Vite)
+```text
+http://localhost:5000
+```
 
-```bash
+Nếu model fan/light chưa có hoặc muốn train lại từ dataset:
+
+```powershell
+cd backend
+python train.py
+```
+
+Nếu muốn retrain từ log thao tác người dùng:
+
+```powershell
+cd backend
+python retrain.py
+```
+
+## Chạy web frontend
+
+```powershell
 cd frontend
-
-# 1. Cài dependencies
 npm install
-
-# 2. Tạo file .env
-copy .env.example .env       # Windows
-# cp .env.example .env       # macOS/Linux
-
-# 3. Chạy dev server
 npm run dev
-# → http://localhost:5173
 ```
 
-> **Lưu ý:** Frontend tự proxy `/api/*` sang `http://localhost:5000` — chỉ cần chạy cả hai cùng lúc.
+Web mặc định chạy tại:
 
----
+```text
+http://localhost:5173
+```
 
-### Mobile App (React Native Expo)
+Frontend dùng `frontend/src/services/api.js` với base URL mặc định `http://localhost:5000/api`. Nếu backend chạy port khác, tạo `frontend/.env`:
 
-**Yêu cầu thêm:** Cài [Expo Go](https://expo.dev/go) trên điện thoại Android/iOS.
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+```
 
-```bash
+## Chạy mobile app
+
+```powershell
 cd mobile
-
-# 1. Cài dependencies
 npm install
-
-# 2. Đổi IP backend trong services/api.ts
-#    BASE_URL = 'http://<IP-máy-tính>:5000/api'
-#    Lấy IP: ipconfig (Windows) | ifconfig (macOS/Linux)
-#    Điện thoại và PC phải cùng mạng WiFi
-
-# 3. Chạy
 npx expo start
-# → Quét QR bằng Expo Go
 ```
 
-#### 4 màn hình mobile
+Trước khi quét QR bằng Expo Go, sửa `BASE_URL` trong `mobile/services/api.ts`:
 
-| Tab | Chức năng | API được gọi |
-|-----|-----------|-------------|
-| Tổng quan | Sensor, thiết bị, log | _(static/polling)_ |
-| Khuôn mặt | Đăng ký + nhận diện → mở cửa | `POST /api/ai/face-recognition` |
-| Giọng nói | Nhận lệnh nói → thực thi | `POST /api/ai/voice-recognition` |
-| Cảnh báo | Gas gauge, người lạ, lịch sử | _(static/polling)_ |
-
----
-
-## 6. Biến môi trường
-
-### `backend/.env`
-
-| Biến | Mô tả | Ví dụ |
-|------|-------|-------|
-| `ADAFRUIT_USERNAME` | Username Adafruit IO | `Bong_Bong` |
-| `ADAFRUIT_API_KEY` | API Key Adafruit IO | `aio_xxxx...` |
-| `ADAFRUIT_DASHBOARD_KEY` | Key của dashboard | `nothing` |
-| `FLASK_PORT` | Port Flask server | `5000` |
-
-### `frontend/.env`
-
-| Biến | Mô tả | Mặc định |
-|------|-------|---------|
-| `VITE_API_BASE_URL` | URL backend (dùng cho proxy) | `http://localhost:5000` |
-
-> API Key Adafruit lấy tại: **io.adafruit.com → My Key** (góc phải trên).
-
----
-
-## 7. Chạy toàn bộ hệ thống
-
-Mở **3 terminal** riêng tại thư mục `Yolo-home/`:
-
-```bash
-# Terminal 1 — Backend
-cd backend && venv\Scripts\activate && python app.py
-
-# Terminal 2 — Frontend Web
-cd frontend && npm run dev
-
-# Terminal 3 — Mobile
-cd mobile && npx expo start
+```ts
+const BASE_URL = 'http://<IP-LAN-cua-may-tinh>:5000/api';
 ```
 
----
+Lấy IP trên Windows:
 
-## 8. Kiến trúc hệ thống
-
-```
-┌─────────────────────────────────────────────────────────┐
-│         ☁️  Lớp ứng dụng (Cloud & App Layer)            │
-│   Adafruit IO · React Frontend · Flask Backend          │
-└──────────────────────────┬──────────────────────────────┘
-                           │ MQTT / REST
-┌──────────────────────────▼──────────────────────────────┐
-│          🖥️  Lớp trung gian (Gateway Layer)              │
-│   Flask · AI Inference · Adafruit API                   │
-└──────────────────────────┬──────────────────────────────┘
-                           │ WiFi (MQTT)
-┌──────────────────────────▼──────────────────────────────┐
-│            📡  Lớp thiết bị (Edge Layer)                 │
-│   Yolo:Bit · Cảm biến · Động cơ · Đèn · Servo           │
-└─────────────────────────────────────────────────────────┘
+```powershell
+ipconfig
 ```
 
----
+Điện thoại và máy chạy backend cần ở cùng mạng Wi-Fi. Vì backend bind `0.0.0.0`, mobile có thể gọi qua IP LAN nếu firewall cho phép port `5000`.
 
-## 9. Đội ngũ thực hiện
+## API chính
 
-| Vai trò | Trách nhiệm |
-|---------|-------------|
-| 🔧 **Hardware Lead** | Kết nối mạch, sensor và logic nhúng. |
-| 🤖 **AI & Gateway Expert** | Script Python, xử lý Serial và huấn luyện mô hình ML. |
-| ☁️ **Backend Developer** | Flask API, Adafruit IO integration. |
-| 🎨 **Frontend Developer** | React Dashboard UI/UX. |
+| Method | Endpoint | Mô tả |
+| --- | --- | --- |
+| GET | `/api/feeds` | Lấy danh sách feed và `last_value` từ Adafruit IO |
+| GET | `/api/feeds/<feed_key>/data?limit=100` | Lấy lịch sử feed |
+| POST | `/api/feeds/<feed_key>/data` | Gửi dữ liệu lên feed |
+| GET | `/api/dashboard/blocks` | Lấy dashboard blocks từ Adafruit IO |
+| POST | `/api/ai/auto-control` | Đề xuất điều khiển quạt/đèn bằng ML |
+| POST | `/api/ai/face-register` | Đăng ký mẫu khuôn mặt |
+| POST | `/api/ai/face-recognition` | Nhận diện khuôn mặt và mở cửa nếu đạt ngưỡng |
+| POST | `/api/ai/face-retrain` | Train lại FaceAI từ mẫu đã lưu |
+| GET | `/api/ai/face-labels` | Danh sách khuôn mặt đã đăng ký |
+| DELETE | `/api/ai/face-labels/<label>` | Xóa một label khuôn mặt, cần PIN quản trị |
+| POST | `/api/ai/voice-recognition` | Nhận diện giọng nói dạng mock |
+| GET | `/api/security/pin/status` | Trạng thái PIN và khóa tạm thời |
+| POST | `/api/security/pin/verify` | Xác thực PIN |
+| POST | `/api/security/pin/change` | Đổi PIN |
+| POST | `/api/security/pin/reset` | Reset khóa tạm thời |
+| GET | `/api/security/pin/log` | Lịch sử nhập PIN |
+| GET/POST | `/api/security/face/log` | Lịch sử nhận diện khuôn mặt |
+| GET/POST | `/api/security/voice/log` | Lịch sử giọng nói |
 
----
+## Kiểm thử và build
 
-<div align="center">
-  <sub>© 2026 Yolo:Home Project – Powered by OhStem & ESP32</sub>
-</div>
+Backend unit test:
+
+```powershell
+cd backend
+python -m unittest discover -s tests
+```
+
+Frontend lint/build:
+
+```powershell
+cd frontend
+npm run lint
+npm run build
+```
+
+Mobile có thể kiểm tra bằng Expo:
+
+```powershell
+cd mobile
+npm run web
+```
+
+## Ghi chú hiện trạng
+
+- `backend/.env`, `frontend/.env`, `node_modules`, build output và virtualenv đã được ignore.
+- `backend/routes/security.py` lưu PIN và log trong memory, nên sẽ reset khi restart server.
+- FaceAI lưu mẫu ảnh vào thư mục dữ liệu và tạo `face_model.pkl` sau khi retrain.
+- Nhận diện giọng nói hiện là mock trong `backend/ai/recognition.py`.
+- Một số màn hình mobile như cảnh báo và giọng nói vẫn dùng mock data hoặc UI demo.
+
+## Chạy toàn hệ thống trong lúc demo
+
+Mở 3 terminal:
+
+```powershell
+# Terminal 1
+cd backend
+.\venv\Scripts\Activate.ps1
+python app.py
+
+# Terminal 2
+cd frontend
+npm run dev
+
+# Terminal 3
+cd mobile
+npx expo start
+```
+
+Luồng demo gợi ý: mở web dashboard, kiểm tra feed Adafruit, nhập PIN, đăng ký ít nhất 3 ảnh cho một label FaceAI, retrain, sau đó thử nhận diện để gửi lệnh mở cửa qua feed `lock-status`.
